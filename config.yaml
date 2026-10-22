@@ -1,0 +1,69 @@
+# Content bot settings (no secrets here — those live in .env).
+profile:
+  name: Shivam
+  handle: linkedin.com/in/shivam-kumar-4b334b210
+  role: Product Designer
+brand:
+  primary: '#111827'
+  secondary: '#FF6B4A'
+  dark: '#0F172A'
+  light: '#F8FAFC'
+fonts:
+  heading: dm-sans
+  body: poppins
+  serif: dm-serif-display
+image:
+  width: 1080
+  height: 1350
+  themes:
+  - grid
+  - accent
+  - gradient
+  - glass
+  - tiles
+  - skeuo
+schedule:
+  timezone: Asia/Kolkata
+  times:
+  - '13:00'
+  posts_per_day: 2
+  format_plan:
+    mon:
+    - carousel:tips
+    - single:do_dont
+    tue:
+    - single:bold_statement
+    - checklist:checklist
+    wed:
+    - checklist:quick_tip
+    - carousel:breakdown
+    thu:
+    - single:myth_vs_reality
+    - quote:insight
+    fri:
+    - carousel:breakdown
+    - single:before_after
+    sat:
+    - quote:reflective
+    - checklist:checklist
+    sun:
+    - quote:reflective
+    - single:bold_statement
+content:
+  no_repeat_days: 30
+  dev_topic_ratio: 0.0
+  language: English
+  portfolio: []
+ai:
+  provider: gemini
+  fallbacks:
+  - groq
+  - ollama
+  gemini_model: gemini-3.6-flash
+  groq_model: openai/gpt-oss-120b
+  ollama_model: llama3.1
+  ollama_url: http://localhost:11434
+  temperature: 0.9
+telegram:
+  linkedin_url: https://www.linkedin.com/feed/
+  text_style: code

@@ -1,0 +1,79 @@
+# Runs the bot on GitHub's free runners, even when your PC is off.
+# Cron is in UTC. 13:00 IST = 07:30 UTC.
+# Changed your times? Run `python bot.py cron` to print the new lines.
+# GitHub may start scheduled runs a few minutes (sometimes 15–30+) late.
+name: Daily posts
+
+on:
+  schedule:
+    - cron: "30 7 * * *"   # 13:00 Asia/Kolkata
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "due = posts whose time has passed, all = all of today's posts, dry-run = don't send"
+        default: all
+        type: choice
+        options: [due, all, dry-run]
+
+permissions:
+  contents: write   # to commit data/history.json so topics don't repeat
+
+concurrency:
+  group: daily-posts
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Cache fonts
+        uses: actions/cache@v4
+        with:
+          path: assets/fonts
+          key: fonts-v1
+
+      - name: Generate and send
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          MODE: ${{ github.event.inputs.mode || 'due' }}
+        run: |
+          case "$MODE" in
+            all)     python generate_once.py --all ;;
+            dry-run) python generate_once.py --all --dry-run ;;
+            *)       python generate_once.py ;;
+          esac
+
+      - name: Save history (so topics don't repeat)
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update post history [skip ci]"
+            git pull --rebase --autostash
+            git push
+          fi
+
+      - name: Keep generated files for 3 days
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: output-${{ github.run_id }}
+          path: output/
+          retention-days: 3
+          if-no-files-found: ignore

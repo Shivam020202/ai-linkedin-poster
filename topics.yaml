@@ -1,0 +1,117 @@
+# Topic bank. Edit freely: add/remove lines, add categories.
+# Each category has a `guide` telling the writer how to approach that kind of topic.
+# Topics added from Telegram with /add land in the "custom" category.
+
+categories:
+  problem_solving:
+    label: Problem solving
+    guide: Walk through an unusual, clever way to solve a real interface problem. Show the problem, the
+      obvious-but-weak fix, and the better idea with a concrete example.
+    topics:
+      - Solving a crowded settings page with progressive disclosure instead of more tabs
+      - Fixing "where am I?" confusion in deep navigation without adding breadcrumbs everywhere
+      - Designing a dashboard for people who only look at it once a week
+      - Turning a 12-field form into a conversation without making it slower
+      - Handling long, unpredictable user-generated names in tight layouts
+      - Designing for the moment something goes wrong, not just the happy path
+      - Making a dense data table readable on a phone
+      - Reducing decision fatigue on a pricing page
+      - Designing search for people who don't know what the thing is called
+      - Making waiting feel shorter when you can't make it faster
+
+  misconceptions:
+    label: Design misconceptions
+    guide: Name a belief many designers or stakeholders genuinely hold, explain why it's wrong or incomplete,
+      and show what to do instead with a specific example. Never invent studies or numbers.
+    topics:
+      - '"Users don''t scroll" — what actually happens below the fold'
+      - '"Minimal means fewer features"'
+      - '"Dark mode is just inverted colours"'
+      - '"More whitespace always looks more premium"'
+      - '"Accessibility makes designs ugly"'
+      - '"The 3-click rule" and why click count is the wrong metric'
+      - '"Consistency means everything must look the same"'
+      - '"Good design doesn''t need words"'
+      - '"Animation is decoration"'
+      - '"Users read interfaces" — they scan them'
+
+  breaking_norms:
+    label: Breaking the norms
+    guide: Pick a convention, explain why it exists, then argue when and how breaking it works better — with
+      a fair note on when NOT to break it.
+    topics:
+      - When a hamburger menu is the right call and when it hides your product
+      - Left-aligned modals and other layouts that break the centred default
+      - Ditching the hero image for a product-first landing page
+      - Using serif fonts in a modern product interface
+      - Asymmetric layouts that still feel balanced
+      - Breaking the grid on purpose without making a mess
+      - Big, opinionated typography in places we usually play safe
+      - Removing the confirmation dialog and offering undo instead
+
+  experiments:
+    label: Trying something new
+    guide: Write as a designer who tried a new technique, tool or habit. Be honest about what worked and what
+      didn't. Keep it personal and specific — no made-up results.
+    topics:
+      - Designing a whole screen in greyscale before adding any colour
+      - Writing the interface copy before drawing a single box
+      - Designing with real data from day one
+      - Starting from the mobile layout even for a desktop-first product
+      - Using variable fonts to build an expressive type system
+      - Prototyping micro-interactions before the static screens
+      - Limiting myself to two font sizes for an entire page
+      - Running a five-minute hallway test on my own design
+
+  modern_trends:
+    label: Modern design trends
+    guide: Explain a current trend, what makes it work, where it fails, and how to use it well. Give
+      concrete, buildable details (sizes, colours, effects).
+    topics:
+      - Bento grid layouts and how to keep them from becoming a puzzle
+      - Liquid glass and frosted surfaces without wrecking readability
+      - Oversized, expressive typography as the main visual
+      - Gradient meshes and grainy textures done tastefully
+      - Micro-interactions that give feedback instead of just moving
+      - Designing interfaces for AI features — showing uncertainty and progress
+      - Spatial and depth cues coming back after years of flat design
+      - Dark-first design systems
+      - Kinetic type and motion in product UI
+      - Neo-brutalism — raw, bold, and when it actually fits a brand
+
+  brand_systems:
+    label: Brand design systems
+    guide: Explore a real, public design system. Only state things that are widely documented in its public
+      guidelines (its principles, component patterns, naming, typography choices). If unsure about a detail,
+      leave it out. Never invent internal stories, metrics or quotes. Focus on what other designers can learn.
+    topics:
+      - What Google's Material Design 3 teaches about dynamic colour
+      - Apple's Human Interface Guidelines and the idea of deference to content
+      - IBM Carbon and designing for dense enterprise data
+      - Shopify Polaris and writing content guidelines into a design system
+      - Atlassian's design system and designing for many products at once
+      - GitHub Primer and building a system around developer workflows
+      - Microsoft Fluent and designing across very different devices
+      - Uber's Base design system and designing for glanceable, on-the-move use
+      - Salesforce Lightning and the design-token idea it helped popularise
+      - What makes a design system's documentation actually usable
+
+  retro_revival:
+    label: Retro revival
+    guide: Pick an older design style or pattern, explain what made it genuinely good, why it faded, and give
+      a concrete recipe for bringing it back with a modern touch (accessibility, today's screens, restraint).
+    topics:
+      - Skeuomorphism — the good parts worth bringing back
+      - Swiss / International Typographic Style for modern product pages
+      - The early-2000s glossy "Aqua" buttons, reimagined
+      - Bauhaus geometry and primary colours in modern branding
+      - Pixel art and bitmap fonts as a deliberate aesthetic
+      - Memphis design patterns, toned down for interfaces
+      - Y2K chrome and translucency with modern restraint
+      - Visible, tactile toggles and switches instead of flat checkboxes
+      - Classic print editorial layouts on the web
+      - Hand-drawn illustration styles making a comeback in product UI
+
+  custom:
+    label: My topics
+    topics: []

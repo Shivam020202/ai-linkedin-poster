@@ -1,0 +1,13 @@
+# secrets — never commit
+.env
+*.env
+!.env.example
+
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+output/
+preview/
+assets/fonts/*.ttf
+bot.log
