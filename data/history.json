@@ -1,0 +1,36 @@
+{
+  "posts": [
+    {
+      "id": "261023-1",
+      "date": "2026-10-23",
+      "slot": 0,
+      "created_at": "2026-10-22T19:32:56",
+      "topic": "Bento grid layouts and how to keep them from becoming a puzzle",
+      "category": "modern_trends",
+      "format": "carousel",
+      "angle": "breakdown",
+      "voice": "Share a mistake you used to make and what you do now.",
+      "theme": "grid",
+      "hook": "Bento grids shouldn't feel like visual Tetris.",
+      "project": null,
+      "dir": "output/2026-10-23/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261023-2",
+      "date": "2026-10-23",
+      "slot": 1,
+      "created_at": "2026-10-22T19:33:13",
+      "topic": "Designing interfaces for AI features — showing uncertainty and progress",
+      "category": "modern_trends",
+      "format": "single",
+      "angle": "before_after",
+      "voice": "Direct teaching voice: state the rule, then show it.",
+      "theme": "accent",
+      "hook": "Static spinners break trust when an AI system takes more than two seconds to respond.",
+      "project": null,
+      "dir": "output/2026-10-23/post-2",
+      "delivered": true
+    }
+  ]
+}
