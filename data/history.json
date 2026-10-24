@@ -47,6 +47,38 @@
       "project": null,
       "dir": "output/2026-10-23/post-1",
       "delivered": true
+    },
+    {
+      "id": "261024-1",
+      "date": "2026-10-24",
+      "slot": 0,
+      "created_at": "2026-10-24T12:13:07",
+      "topic": "Solving a crowded settings page with progressive disclosure instead of more tabs",
+      "category": "problem_solving",
+      "format": "quote",
+      "angle": "reflective",
+      "voice": "Contrarian but fair: challenge a popular habit, then give the nuance.",
+      "theme": "glass",
+      "hook": "When a settings view feels overwhelming, our reflex is to add another tab. It usually just hides the clutter.",
+      "project": null,
+      "dir": "output/2026-10-24/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261024-2",
+      "date": "2026-10-24",
+      "slot": 1,
+      "created_at": "2026-10-24T12:14:48",
+      "topic": "Microsoft Fluent and designing across very different devices",
+      "category": "brand_systems",
+      "format": "checklist",
+      "angle": "checklist",
+      "voice": "Open with a short scenario from a recent (unnamed) project.",
+      "theme": "tiles",
+      "hook": "A design system built only for desktop web quickly falls apart on a touch screen.",
+      "project": null,
+      "dir": "output/2026-10-24/post-2",
+      "delivered": true
     }
   ]
 }
