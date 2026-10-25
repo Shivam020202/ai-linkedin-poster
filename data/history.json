@@ -79,6 +79,38 @@
       "project": null,
       "dir": "output/2026-10-24/post-2",
       "delivered": true
+    },
+    {
+      "id": "261025-1",
+      "date": "2026-10-25",
+      "slot": 0,
+      "created_at": "2026-10-25T12:44:47",
+      "topic": "Bauhaus geometry and primary colours in modern branding",
+      "category": "retro_revival",
+      "format": "quote",
+      "angle": "reflective",
+      "voice": "Direct teaching voice: state the rule, then show it.",
+      "theme": "skeuo",
+      "hook": "Bauhaus minimalism failed on digital screens because pure primary yellow cannot pass contrast on white.",
+      "project": null,
+      "dir": "output/2026-10-25/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261025-2",
+      "date": "2026-10-25",
+      "slot": 1,
+      "created_at": "2026-10-25T12:45:43",
+      "topic": "Ditching the hero image for a product-first landing page",
+      "category": "breaking_norms",
+      "format": "single",
+      "angle": "bold_statement",
+      "voice": "Lead with a question a junior designer asked you, then answer it.",
+      "theme": "grid",
+      "hook": "\"Why are we hiding the tool behind a 3D glass orb?\" a junior designer asked me during a landing page review.",
+      "project": null,
+      "dir": "output/2026-10-25/post-2",
+      "delivered": true
     }
   ]
 }
