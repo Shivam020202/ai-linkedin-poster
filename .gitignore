@@ -11,3 +11,8 @@ output/
 preview/
 assets/fonts/*.ttf
 bot.log
+
+# desktop/editor junk
+.directory
+.DS_Store
+Thumbs.db

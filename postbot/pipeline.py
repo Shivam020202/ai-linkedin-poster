@@ -65,13 +65,13 @@ def build_post(cfg: dict, store: Store, chain, *, day: date, slot: int = 0, fmt_
     if data is None:
         if offline:
             data = sample_post("carousel" if plan.fmt == "carousel" else
-                               {"single": "do_dont", "quote": "quote", "checklist": "checklist"}[plan.fmt])
+                               {"single": "timeline", "quote": "quote", "checklist": "checklist"}[plan.fmt])
         else:
             log.info("generating %s:%s — %s", plan.fmt, plan.angle, plan.topic.text)
             data = generate_content(chain, cfg, plan, history)
     theme_name = choose_theme(cfg, store, history, theme)
     out_dir = _post_dir(day.isoformat())
-    renderer = Renderer(cfg, theme_name)
+    renderer = Renderer(cfg, theme_name, seed=f"{day.isoformat()}:{out_dir.name}:{plan.topic.text}")
     rendered = renderer.render_post(data, out_dir, kicker=plan.topic.label if plan.topic.category != "custom" else "")
     post_id = f"{day.strftime('%y%m%d')}-{out_dir.name.split('-')[1]}"
 

@@ -101,7 +101,25 @@ Check the connection any time with `python bot.py test`.
   Keep your favourites in `image.themes`, or fix one with `/theme glass`. Every painted background is checked against WCAG AA on its **actual pixels**, and dimmed or adjusted until all text passes.
 - Text **auto-fits**: it wraps, then shrinks, and only as a last resort gets cut short with "…". It never overflows. The model is told the per-field character limits.
 - **Contrast check:** every theme is checked against WCAG AA (4.5:1 for body text, 3:1 for large text and accents). Colours that fail are adjusted automatically; if a theme still fails with your brand colours, the bot uses `grid` instead.
-- **Illustrations** are drawn, not generated: 8-pt grid, spacing guides, type scale, contrast swatches (ratios calculated on the spot), weak vs strong buttons, form field with error state, card, hierarchy, touch targets, alignment, empty state, checklist, brand swatches.
+- **Slides are graphic-first.** Each slide is a short headline plus an illustration that *shows* the idea, so the image doesn't repeat the post. The model picks a graphic per slide and fills it with labels from the topic:
+
+  | Graphic | Shows |
+  |---|---|
+  | `phone` | A tilted phone with a real app screen (16 screens: list, form, dashboard, chat, settings, pricing, empty state…) |
+  | `browser` | A browser window with a web layout (hero, bento, editorial, asymmetric, dashboard, grid) |
+  | `compare` | Two devices side by side: the weak version vs the better one, with ✗/✓ labels |
+  | `timeline` | Eras on a timeline (retro revivals, how a trend evolved) |
+  | `layers` | An exploded isometric stack (tokens → components → patterns → pages) |
+  | `components` | A floating collage of UI components as sticker cut-outs |
+  | `steps` | A process flow with glossy icon tiles |
+  | `spectrum` | A trade-off slider |
+  | `palette` | A paint-chip fan of named colours |
+  | `type` | A type specimen with baseline / x-height lines |
+  | `stat` | One real design value (4.5:1, 44px…) on a badge |
+  | `icons`, `hero_icon`, `checklist` | Concept tiles, a bold 3D icon, a recap card |
+
+- **Variety:** layouts (headline-first, graphic-first, split with the device bleeding off the edge) and the illustrations' companion colour change from post to post. Everything is drawn at 2× and downsampled, so edges are smooth.
+- **Free and local:** illustrations are drawn with Pillow. Free AI image generation was tested, but Gemini's image models have no free quota and the free no-key services produce low-quality, watermarked images.
 - Fonts: Inter, Poppins, Space Grotesk, DM Sans, plus DM Serif Display for quotes. All are free Google Fonts (OFL), downloaded into `assets/fonts/` on first run. If a download fails, a system font is used.
 
 Everything for a post is saved in `output/YYYY-MM-DD/post-N/`: `slide-01.png…`, `carousel.pdf`, `post.txt` and `meta.json`.

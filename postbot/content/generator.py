@@ -97,7 +97,7 @@ def generate_content(chain, cfg: dict, plan: Plan, history: list[dict]) -> dict:
     )
     data = _ask(chain, prompts.system_prompt(cfg), user, plan.fmt)
     tags = FALLBACK_TAGS.get(plan.topic.category, DEFAULT_TAGS)
-    data = normalize(data, plan.fmt, tags)
+    data = normalize(data, plan.fmt, tags, plan.topic.category)
     data["topic"] = plan.topic.text
     return data
 
@@ -108,6 +108,6 @@ def revise_content(chain, cfg: dict, previous: dict, instruction: str,
     keep = {k: previous[k] for k in ("format", "topic", "hook", "post_text", "hashtags", "slides",
                                       "alt_text", "image_caption") if k in previous}
     data = _ask(chain, prompts.system_prompt(cfg), prompts.revise_prompt(keep, instruction), fmt, length)
-    data = normalize(data, fmt, previous.get("hashtags") or DEFAULT_TAGS)
+    data = normalize(data, fmt, previous.get("hashtags") or DEFAULT_TAGS, previous.get("category", ""))
     data["topic"] = previous.get("topic", data.get("topic", ""))
     return data

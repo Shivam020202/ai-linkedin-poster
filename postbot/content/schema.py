@@ -5,49 +5,67 @@ import json
 import re
 
 FORMATS = {
-    "carousel": (7, 9),
+    "carousel": (6, 9),
     "single": (1, 1),
     "quote": (1, 1),
     "checklist": (1, 1),
 }
 
-# kind -> {field: max chars}; the model sees these limits in the prompt.
+# kind -> {field: max chars}. Slide text is a short headline, NOT the post text — the graphic does the talking.
 KINDS: dict[str, dict[str, int]] = {
-    "hook": {"title": 80, "body": 120},
-    "problem": {"title": 60, "body": 220},
-    "tip": {"title": 60, "body": 220},
-    "text": {"title": 60, "body": 220},
-    "recap": {"title": 60, "items": 60},
-    "cta": {"title": 60, "body": 140},
-    "statement": {"title": 110, "body": 160},
-    "do_dont": {"title": 60, "do": 110, "dont": 110},
-    "before_after": {"title": 60, "before": 110, "after": 110},
-    "myth_reality": {"title": 60, "myth": 120, "reality": 160},
-    "quote": {"title": 170, "body": 80},
-    "checklist": {"title": 60, "items": 70},
+    "cover": {"title": 70, "caption": 110},
+    "point": {"title": 60, "caption": 110},
+    "quote": {"title": 170, "caption": 80},
+    "checklist": {"title": 60, "caption": 110},
+    "cta": {"title": 60, "caption": 110},
 }
-REQUIRED = {
-    "do_dont": ("do", "dont"), "before_after": ("before", "after"),
-    "myth_reality": ("myth", "reality"), "checklist": ("items",), "recap": ("items",),
-}
+LEGACY_KINDS = {"hook": "cover", "statement": "cover", "problem": "point", "tip": "point", "text": "point",
+                "do_dont": "point", "before_after": "point", "myth_reality": "point", "recap": "checklist"}
 
-# Illustrations the image engine can draw (see images/visuals.py).
-VISUALS = {
-    "none": "no illustration",
-    "grid8": "8-pt spacing grid with a card snapped to it",
-    "spacing": "spacing guides between stacked elements (8/16/24/32)",
-    "type_scale": "type specimen showing a size scale",
-    "contrast": "colour contrast pass/fail swatches with real ratios",
-    "buttons": "weak vs strong button (hierarchy, padding, contrast)",
-    "form_field": "input with label above, helper text and error state",
-    "card": "simple UI card mock-up (image, title, text, button)",
-    "hierarchy": "wireframe showing heading > subheading > body",
-    "touch_target": "small icon vs 48px touch target",
-    "swatches": "brand colour palette swatches",
-    "alignment": "messy vs aligned left edge",
-    "empty_state": "empty-state mock-up with illustration placeholder and CTA",
-    "checklist": "checkbox list illustration",
+SCREENS = ["list", "cards", "form", "placeholder_form", "table", "table_cards", "dashboard", "chat", "empty_state",
+           "settings", "search", "onboarding", "pricing", "nav_bottom", "cluttered", "product"]
+LAYOUTS = ["hero", "bento", "editorial", "asymmetric", "dashboard", "grid"]
+COMPONENT_KINDS = ["button", "toggle", "slider", "checkbox", "chip", "avatars", "input", "rating", "tabs", "progress"]
+ICON_NAMES = ["search", "menu", "user", "heart", "star", "bell", "gear", "home", "chart", "lock", "eye", "cursor",
+              "layers", "grid", "palette", "type", "phone", "monitor", "sparkle", "bolt", "clock", "check", "cross",
+              "arrow", "toggle", "chat", "cart", "filter", "bulb", "target", "compass", "puzzle", "ruler", "wand",
+              "refresh", "moon", "sun", "image", "play", "globe", "shield", "bookmark", "cube", "brush",
+              "accessibility"]
+
+# What the model is told about each graphic (also used to validate).
+GRAPHICS = {
+    "phone": "phone mock-up of a real app screen. {screen: one of SCREENS, title: <=22 chars, items: up to 6 labels <=20}",
+    "browser": "browser window with a web layout. {layout: one of LAYOUTS, title: <=28, items: up to 5 labels <=18}",
+    "compare": "two devices side by side, weak vs better. {left_label: <=16, right_label: <=16, left_screen: SCREEN or "
+               "LAYOUT, right_screen: SCREEN or LAYOUT, winner: left|right|none, title: <=22, items: labels}",
+    "steps": "a process flow. {items: 3-5 of {icon: ICON, label: <=18}}",
+    "icons": "tiles of concepts. {items: 3-6 of {icon: ICON, label: <=16}}",
+    "timeline": "eras over time. {items: 3-5 of {year: <=6, label: <=20}} — use a year ONLY if it is widely known "
+                "and certain (e.g. iOS 7 flat redesign = 2013); otherwise use 'Before', 'Then', 'Early', 'Now'",
+    "spectrum": "a trade-off slider. {left: <=16, right: <=16, marker: 0-100, marker_label: <=18}",
+    "stat": "one big design value. {value: <=8 e.g. '4.5:1', '44px', '8pt', label: <=30, icon: ICON} — only real, "
+            "verifiable design values, never invented statistics",
+    "layers": "exploded isometric stack. {items: 3-5 labels <=18, bottom layer first}",
+    "components": "floating collage of UI components. {items: 3-6 of COMPONENTS}",
+    "palette": "fan of colour chips. {colors: 3-6 of {hex: '#RRGGBB', name: <=12}}",
+    "type": "type specimen with metric lines. {sample: <=10 chars, style: serif|sans|display|mono, label: <=22}",
+    "checklist": "card with checked items. {items: 3-5 short items <=44}",
+    "hero_icon": "big glossy 3D icon with floating satellite icons. {icon: ICON, items: up to 4 ICONs}",
 }
+# Sensible pictures per category when the model's graphic is missing or broken.
+CATEGORY_GRAPHICS = {
+    "problem_solving": [{"type": "compare", "left_screen": "cluttered", "right_screen": "cards", "winner": "right"},
+                        {"type": "phone", "screen": "settings"}, {"type": "steps"}],
+    "misconceptions": [{"type": "compare", "left_label": "Myth", "right_label": "Reality", "winner": "right"},
+                       {"type": "spectrum"}, {"type": "hero_icon", "icon": "bulb"}],
+    "breaking_norms": [{"type": "browser", "layout": "asymmetric"}, {"type": "browser", "layout": "editorial"},
+                       {"type": "hero_icon", "icon": "bolt"}],
+    "experiments": [{"type": "steps"}, {"type": "hero_icon", "icon": "wand"}, {"type": "phone", "screen": "onboarding"}],
+    "modern_trends": [{"type": "browser", "layout": "bento"}, {"type": "components"}, {"type": "hero_icon", "icon": "sparkle"}],
+    "brand_systems": [{"type": "layers"}, {"type": "palette"}, {"type": "components"}],
+    "retro_revival": [{"type": "timeline"}, {"type": "components"}, {"type": "type", "style": "serif"}],
+}
+DEFAULT_GRAPHICS = [{"type": "hero_icon", "icon": "sparkle"}, {"type": "icons"}, {"type": "components"}]
 
 BANNED = [
     "in today's fast-paced world", "game-changer", "game changer", "unlock the power", "delve",
@@ -106,26 +124,29 @@ def validate(data: dict, fmt: str, length: tuple[int, int] | None = None) -> tup
     lo, hi = FORMATS[fmt]
     if not lo <= len(slides) <= hi:
         hard.append(f"Format '{fmt}' needs {lo}–{hi} slides, got {len(slides)}.")
+    types = []
     for i, slide in enumerate(slides, 1):
         if not isinstance(slide, dict):
             hard.append(f"Slide {i} is not an object.")
             continue
-        kind = slide.get("kind")
+        kind = LEGACY_KINDS.get(slide.get("kind"), slide.get("kind"))
         if kind not in KINDS:
-            hard.append(f"Slide {i}: unknown kind '{kind}'. Use one of {sorted(KINDS)}.")
-            continue
+            soft.append(f"Slide {i}: unknown kind '{kind}'. Use one of {sorted(KINDS)}.")
+            kind = "point"
         if not _s(slide.get("title")):
             hard.append(f"Slide {i}: missing title.")
-        for field in REQUIRED.get(kind, ()):
-            if not slide.get(field):
-                hard.append(f"Slide {i} ({kind}): missing '{field}'.")
         for field, limit in KINDS[kind].items():
-            values = slide.get(field) if field == "items" else [slide.get(field)]
-            for v in values or []:
-                if isinstance(v, str) and len(v) > limit:
-                    soft.append(f"Slide {i} '{field}' is {len(v)} chars; max {limit}.")
-        if slide.get("visual") and slide["visual"] not in VISUALS:
-            soft.append(f"Slide {i}: unknown visual '{slide['visual']}'.")
+            v = slide.get(field)
+            if isinstance(v, str) and len(v) > limit:
+                soft.append(f"Slide {i} '{field}' is {len(v)} chars; max {limit}. Slide text is a short headline.")
+        g = slide.get("graphic")
+        if kind in ("cover", "point"):
+            if not isinstance(g, dict) or g.get("type") not in GRAPHICS:
+                soft.append(f"Slide {i}: needs a 'graphic' whose type is one of {sorted(GRAPHICS)}.")
+            else:
+                types.append(g["type"])
+    if fmt == "carousel" and len(types) >= 4 and len(set(types)) < 3:
+        soft.append("Use at least 3 different graphic types across the carousel so slides don't look alike.")
 
     post = _s(data.get("post_text"))
     lo_len, hi_len = length or (900, 1300)
@@ -161,7 +182,7 @@ def _trim(text: str, limit: int) -> str:
     return cut + "…"
 
 
-def normalize(data: dict, fmt: str, fallback_tags: list[str]) -> dict:
+def normalize(data: dict, fmt: str, fallback_tags: list[str], category: str = "") -> dict:
     """Clamp lengths, tidy hashtags and emoji so a 'soft-invalid' post is still usable."""
     post = _s(data.get("post_text"))
     # pull hashtag lines off the end of the body into the hashtag list
@@ -188,22 +209,10 @@ def normalize(data: dict, fmt: str, fallback_tags: list[str]) -> dict:
     data["hashtags"] = clean_tags[:4] if len(clean_tags) >= 3 else clean_tags
 
     slides = []
-    seen_visuals: set[str] = set()
-    for slide in data.get("slides", []):
-        kind = slide.get("kind", "text")
-        limits = KINDS.get(kind, KINDS["text"])
-        visual = slide.get("visual") if slide.get("visual") in VISUALS else "none"
-        if visual in seen_visuals:
-            visual = "none"  # the same diagram twice in a carousel looks lazy
-        seen_visuals.add(visual) if visual != "none" else None
-        clean = {"kind": kind, "visual": visual}
-        for field, limit in limits.items():
-            if field == "items":
-                items = [i for i in (slide.get("items") or []) if isinstance(i, str) and i.strip()]
-                clean["items"] = [_trim(strip_emoji(i), limit) for i in items[:6]]
-            else:
-                clean[field] = _trim(strip_emoji(_s(slide.get(field))), limit)
-        slides.append(clean)
+    for i, slide in enumerate(data.get("slides", [])):
+        if not isinstance(slide, dict):
+            continue
+        slides.append(normalize_slide(slide, i, category))
     lo, hi = FORMATS[fmt]
     data["slides"] = slides[:hi]
     data["format"] = fmt
@@ -211,6 +220,114 @@ def normalize(data: dict, fmt: str, fallback_tags: list[str]) -> dict:
     data["alt_text"] = _s(data.get("alt_text"))[:1000]
     data["image_caption"] = _s(data.get("image_caption"))
     return data
+
+
+def _str(v, limit) -> str:
+    return _trim(strip_emoji(v if isinstance(v, str) else str(v if v is not None else "")), limit)
+
+
+def _icon(v, default="sparkle") -> str:
+    v = str(v or "").strip().lower()
+    return v if v in ICON_NAMES else default
+
+
+def fallback_graphic(category: str, i: int) -> dict:
+    options = CATEGORY_GRAPHICS.get(category, DEFAULT_GRAPHICS)
+    return dict(options[i % len(options)])
+
+
+def normalize_graphic(g, category: str = "", i: int = 0) -> dict:
+    """Clamp a model-provided graphic spec to what the renderer supports; fall back if unusable."""
+    if not isinstance(g, dict) or g.get("type") not in GRAPHICS:
+        return fallback_graphic(category, i)
+    t = g["type"]
+    out: dict = {"type": t}
+    items = g.get("items") if isinstance(g.get("items"), list) else []
+    if t == "phone":
+        out.update(screen=g.get("screen") if g.get("screen") in SCREENS else "list", title=_str(g.get("title"), 22),
+                   items=[_str(x, 20) for x in items[:6]])
+    elif t == "browser":
+        out.update(layout=g.get("layout") if g.get("layout") in LAYOUTS else "hero", title=_str(g.get("title"), 28),
+                   items=[_str(x, 18) for x in items[:5]])
+    elif t == "compare":
+        ok = SCREENS + LAYOUTS
+        out.update(left_label=_str(g.get("left_label") or "Before", 16), right_label=_str(g.get("right_label") or "After", 16),
+                   left_screen=g.get("left_screen") if g.get("left_screen") in ok else "cluttered",
+                   right_screen=g.get("right_screen") if g.get("right_screen") in ok else "cards",
+                   winner=g.get("winner") if g.get("winner") in ("left", "right", "none") else "right",
+                   title=_str(g.get("title"), 22), items=[_str(x, 20) for x in items[:6]])
+        if out["left_screen"] == out["right_screen"]:  # identical pictures compare nothing: make the loser look weak
+            weak = {"table_cards": "table", "form": "placeholder_form"}.get(out["right_screen"], "cluttered")
+            loser = "left_screen" if out["winner"] != "left" else "right_screen"
+            out[loser] = weak if weak != out[loser] else "table"
+    elif t in ("steps", "icons"):
+        n = 5 if t == "steps" else 6
+        out["items"] = [{"icon": _icon(x.get("icon")), "label": _str(x.get("label"), 18 if t == "steps" else 16)}
+                        if isinstance(x, dict) else {"icon": "sparkle", "label": _str(x, 16)} for x in items[:n]]
+        if len(out["items"]) < 2:
+            return fallback_graphic(category, i)
+    elif t == "timeline":
+        out["items"] = [{"year": _str(x.get("year"), 6), "label": _str(x.get("label"), 20)}
+                        for x in items[:5] if isinstance(x, dict)]
+        if len(out["items"]) < 2:
+            return fallback_graphic(category, i)
+    elif t == "spectrum":
+        try:
+            marker = max(0, min(100, float(g.get("marker", 60))))
+        except (TypeError, ValueError):
+            marker = 60
+        out.update(left=_str(g.get("left") or "Less", 16), right=_str(g.get("right") or "More", 16), marker=marker,
+                   marker_label=_str(g.get("marker_label") or "Sweet spot", 18))
+    elif t == "stat":
+        out.update(value=_str(g.get("value") or "8pt", 8), label=_str(g.get("label"), 30), icon=_icon(g.get("icon"), "ruler"))
+    elif t == "layers":
+        out["items"] = [_str(x, 18) for x in items[:5]] or ["Tokens", "Components", "Patterns", "Pages"]
+    elif t == "components":
+        out["items"] = [x for x in items if x in COMPONENT_KINDS][:6]
+    elif t == "palette":
+        cols = []
+        for c in (g.get("colors") or [])[:6]:
+            if isinstance(c, dict) and re.fullmatch(r"#[0-9a-fA-F]{6}", str(c.get("hex", "")).strip()):
+                cols.append({"hex": c["hex"].strip(), "name": _str(c.get("name"), 12)})
+        out["colors"] = cols
+    elif t == "type":
+        out.update(sample=_str(g.get("sample") or "Aa", 10),
+                   style=g.get("style") if g.get("style") in ("serif", "sans", "display", "mono") else "sans",
+                   label=_str(g.get("label"), 22))
+    elif t == "checklist":
+        out["items"] = [_str(x, 44) for x in items[:5] if str(x).strip()]
+    elif t == "hero_icon":
+        out.update(icon=_icon(g.get("icon")), items=[_icon(x) for x in items[:4] if str(x).lower() in ICON_NAMES])
+    return out
+
+
+def normalize_slide(slide: dict, i: int, category: str = "") -> dict:
+    """Clean one slide. Old-style slides (hook/tip/do_dont…) are converted to the graphic-first format."""
+    kind = slide.get("kind", "point")
+    graphic = slide.get("graphic")
+    caption = slide.get("caption")
+    if kind in LEGACY_KINDS:
+        if kind in ("do_dont", "before_after", "myth_reality"):
+            left, right = {"do_dont": ("dont", "do"), "before_after": ("before", "after"),
+                           "myth_reality": ("myth", "reality")}[kind]
+            caption = caption or slide.get(right)
+            graphic = graphic or {"type": "compare", "left_label": left.capitalize().replace("Dont", "Don't"),
+                                  "right_label": right.capitalize(), "winner": "right"}
+        elif kind == "recap":
+            graphic = graphic or {"type": "checklist", "items": slide.get("items") or []}
+        caption = caption or slide.get("body")
+        kind = LEGACY_KINDS[kind]
+    if kind not in KINDS:
+        kind = "point"
+    limits = KINDS[kind]
+    clean = {"kind": kind, "title": _str(slide.get("title"), limits["title"]),
+             "caption": _str(caption or slide.get("body"), limits["caption"])}
+    if kind == "checklist":
+        items = slide.get("items") or (graphic or {}).get("items") or []
+        clean["graphic"] = {"type": "checklist", "items": [_str(x, 44) for x in items[:5] if str(x).strip()]}
+    elif kind in ("cover", "point") or graphic:
+        clean["graphic"] = normalize_graphic(graphic, category, i)
+    return clean
 
 
 def strip_emoji(text: str) -> str:

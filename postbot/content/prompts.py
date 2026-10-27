@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 
-from .schema import KINDS, VISUALS
+from .schema import COMPONENT_KINDS, GRAPHICS, ICON_NAMES, KINDS, LAYOUTS, SCREENS
 
 SYSTEM = """You write LinkedIn posts for {name}, a {role}. You write like a thoughtful working designer \
 talking to peers: plain {language}, first person when natural, specific and calm.
@@ -33,26 +33,42 @@ or leave it out. Never attribute quotes to real people.
 OUTPUT
 Return ONLY one JSON object, no markdown, matching exactly:
 {{"format": str, "topic": str, "hook": str, "post_text": str, "hashtags": [str],
-  "slides": [{{"kind": str, "title": str, "visual": str, ...kind-specific fields}}],
+  "slides": [{{"kind": str, "title": str, "caption": str, "graphic": {{"type": str, ...}}}}],
   "alt_text": str, "image_caption": str}}
 - alt_text: 1–3 sentences describing the image(s) for screen-reader users (what is shown + the text on it).
 - image_caption: one short line summarising the visual.
+
+IMAGE RULES (the slides are designed graphics, not text pages)
+- The image must NOT repeat the post. The post explains; each slide SHOWS one idea with a picture.
+- Slide "title" = a punchy headline of at most ~8 words in sentence case (never Title Case, never a sentence
+  copied from the post).
+  "caption" = optional, at most ~14 words. Leave it empty if the graphic says enough.
+- Every cover/point slide has a "graphic" that depicts the idea concretely and is specific to the topic:
+  real labels from the topic inside mock-ups, the right screen for the UI pattern, real eras on a timeline,
+  real brand colours on a palette, etc. In "compare", the two screens must be different and the weaker side
+  should look visibly worse (e.g. table vs table_cards, placeholder_form vs form, cluttered vs cards).
+  Pick the type that best SHOWS the point:
+  compare = before/after, myth/reality, weak/better · phone/browser = a UI pattern or layout · timeline = history,
+  retro, evolution · layers = systems and structure · palette = colour · type = typography · spectrum = trade-offs
+  and balance · steps = a process · stat = ONE real design value · components = UI kits and trends ·
+  icons = a set of concepts · hero_icon = a bold single idea · checklist = things to check.
+- Vary graphics: use at least 3 different types in a carousel and never the same type on consecutive slides.
 """
 
 FORMAT_GUIDE = {
-    "carousel": """FORMAT: carousel (LinkedIn PDF document), 7–9 slides, in this order:
-1. kind "hook" — big promise/claim (title) + optional one-line subtitle (body).
-2. kind "problem" — the problem or common mistake.
-3–7. 4–5 slides of kind "tip" (or "do_dont" / "before_after" where a comparison is clearer). Each slide = one \
-point with a concrete example; pick a "visual" that illustrates it when one fits. Use each visual at most \
-once per carousel. Don't number slide titles ("1.", "Tip 2:") — the design adds labels.
-8. kind "recap" — "items": 3–5 short bullet points.
-9. kind "cta" — soft call to action (save, share, follow, or a question).""",
-    "single": "FORMAT: single image card — exactly 1 slide.",
+    "carousel": """FORMAT: carousel (LinkedIn PDF document), 6–8 slides, in this order:
+1. kind "cover" — the hook as a short headline + the most striking graphic for the topic.
+2–6. 4–5 slides of kind "point". One idea per slide: short headline + graphic that shows it. Don't number titles.
+   For a comparison point, use a "compare" graphic (with honest labels like "Scroll table" vs "Stacked cards").
+7. optional kind "checklist" — title + "graphic": {"type": "checklist", "items": [3–5 short items]} as a recap.
+8. kind "cta" — a short, soft call to action headline (save, share, or a question). No graphic needed.""",
+    "single": "FORMAT: single image — exactly 1 slide of kind \"cover\": a short punchy headline + a strong graphic "
+              "that makes the topic obvious at a glance (compare, phone, browser, timeline, layers… whatever fits).",
     "quote": "FORMAT: quote/insight card — exactly 1 slide of kind \"quote\": title = the insight in your own "
-             "words (it's YOUR line, not a famous person's), body = a short context line.",
-    "checklist": "FORMAT: checklist card — exactly 1 slide of kind \"checklist\": title + 4–6 \"items\" that are "
-                 "short, actionable checks.",
+             "words (it's YOUR line, not a famous person's), caption = a short context line, plus a \"graphic\" "
+             "(usually hero_icon or icons) that hints at the subject.",
+    "checklist": "FORMAT: checklist card — exactly 1 slide of kind \"checklist\": title + "
+                 "\"graphic\": {\"type\": \"checklist\", \"items\": [4–5 short, actionable checks]}.",
 }
 
 ANGLE_GUIDE = {
@@ -62,12 +78,12 @@ ANGLE_GUIDE = {
     "case_study": "ANGLE: mini case study / teardown — walk through a real-feeling UI scenario step by step, "
                   "explaining decisions and trade-offs. If it isn't one of my projects, present it as a "
                   "teardown of a common pattern (no brand names, no made-up results).",
-    "do_dont": "ANGLE: do this, not that — slide kind \"do_dont\" with \"do\" and \"dont\" fields.",
-    "before_after": "ANGLE: before → after — slide kind \"before_after\" with \"before\" and \"after\" fields.",
-    "bold_statement": "ANGLE: bold statement — slide kind \"statement\": one punchy, defensible opinion as title, "
-                      "a one-line support in body. Pick a visual that illustrates it.",
-    "myth_vs_reality": "ANGLE: myth vs reality — slide kind \"myth_reality\" with \"myth\" and \"reality\" fields. "
-                       "The myth must be a belief people genuinely hold.",
+    "do_dont": "ANGLE: do this, not that — show it with a \"compare\" graphic (winner = the better one).",
+    "before_after": "ANGLE: before → after — show it with a \"compare\" graphic using two different screens.",
+    "bold_statement": "ANGLE: bold statement — one punchy, defensible opinion as the headline, with a graphic "
+                      "that makes the point visible.",
+    "myth_vs_reality": "ANGLE: myth vs reality — the myth must be a belief people genuinely hold. Show it with a "
+                       "\"compare\" graphic labelled Myth / Reality, or a spectrum.",
     "insight": "ANGLE: insight — a sharp observation from practice, explained with an example.",
     "reflective": "ANGLE: lighter, reflective weekend post — a lesson, a habit, or something that changed how "
                   "you work. Warmer tone, still one concrete example.",
@@ -104,8 +120,9 @@ def user_prompt(*, fmt: str, angle: str, topic: str, category_label: str, voice:
         f"VOICE FOR THIS POST: {voice}",
         "SLIDE KINDS and max characters per field (hard limits — text must fit the image):\n"
         + json.dumps(kinds),
-        "VISUALS (set \"visual\" on each slide; use \"none\" if nothing fits):\n"
-        + "\n".join(f"- {k}: {v}" for k, v in VISUALS.items()),
+        "GRAPHIC TYPES (slide \"graphic\" object):\n" + "\n".join(f"- {k}: {v}" for k, v in GRAPHICS.items()),
+        f"SCREENS: {', '.join(SCREENS)}\nLAYOUTS: {', '.join(LAYOUTS)}\nCOMPONENTS: {', '.join(COMPONENT_KINDS)}\n"
+        f"ICONS: {', '.join(ICON_NAMES)}",
     ]
     if project:
         parts.append(

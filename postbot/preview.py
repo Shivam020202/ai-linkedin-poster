@@ -26,11 +26,12 @@ def contact_sheet(paths: list[Path], dest: Path, cols: int = 5, thumb_w: int = 3
 def run_preview(cfg: dict, themes: list[str] | None = None, out: Path = ROOT / "preview") -> list[Path]:
     sheets = []
     for theme in themes or THEME_NAMES:
-        renderer = Renderer(cfg, theme)
+        renderer = Renderer(cfg, theme, seed=theme)
         tdir = out / theme
-        paths = renderer.render_post(sample_post("carousel"), tdir / "carousel", kicker="UI fundamentals")["images"]
+        paths = renderer.render_post(sample_post("carousel"), tdir / "carousel", kicker="Problem solving")["images"]
         for kind in SINGLES:
-            paths += renderer.render_post(sample_post(kind), tdir / kind, kicker="UI fundamentals")["images"]
+            renderer = Renderer(cfg, theme, seed=f"{theme}-{kind}")  # fresh seed per post, like real runs
+            paths += renderer.render_post(sample_post(kind), tdir / kind, kicker="Problem solving")["images"]
         sheet = out / f"overview-{theme}.png"
         contact_sheet(paths, sheet)
         sheets.append(sheet)

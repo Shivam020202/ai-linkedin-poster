@@ -13,16 +13,16 @@ from postbot.scheduler.local import due_slots
 def test_carousel_renders_pngs_and_pdf(cfg, tmp_path):
     r = Renderer(cfg, "glass")
     out = r.render_post(sample_post(), tmp_path)
-    assert len(out["images"]) == 9 and out["pdf"].exists()
+    assert len(out["images"]) == 7 and out["pdf"].exists()
     assert Image.open(out["images"][0]).size == (1080, 1350)
     pdf = out["pdf"].read_bytes()
-    assert pdf.count(b"/Type /Page") - pdf.count(b"/Type /Pages") == 9
+    assert pdf.count(b"/Type /Page") - pdf.count(b"/Type /Pages") == 7
     assert r.truncations == 0
 
 
 def test_all_themes_and_single_formats_render(cfg, tmp_path):
     for theme in THEME_NAMES:
-        r = Renderer(cfg, theme)
+        r = Renderer(cfg, theme, seed=theme)
         for kind in SINGLES:
             out = r.render_post(sample_post(kind), tmp_path / theme / kind)
             assert len(out["images"]) == 1 and out["pdf"] is None
@@ -37,7 +37,7 @@ def test_custom_size(cfg, tmp_path):
 
 def test_build_post_writes_files_and_history(cfg, isolated):
     post = build_post(cfg, isolated, None, day=date(2026, 10, 26), offline=True)
-    assert (post["dir"] / "post.txt").read_text().startswith("I stopped guessing")
+    assert (post["dir"] / "post.txt").read_text().startswith("Horizontal scrolling tables")
     meta = json.loads((post["dir"] / "meta.json").read_text())
     assert meta["content"]["format"] == "carousel" and "carousel.pdf" in meta["files"]
     assert isolated.history()[-1]["id"] == post["id"]
@@ -90,3 +90,37 @@ def test_due_slots():
     assert due_slots(now, ["09:00", "18:30"], set(), set()) == [0]
     assert due_slots(now, ["09:00", "18:30"], {0}, set()) == []
     assert due_slots(datetime(2026, 10, 22, 12, 0), ["09:00"], set(), set()) == []  # > 2h late: skipped
+
+
+def test_every_graphic_renders_in_every_layout(cfg, tmp_path):
+    """Each graphic type x cover/point layout variant renders without errors or truncation."""
+    from postbot.content.schema import GRAPHICS, fallback_graphic
+    r = Renderer(cfg, "grid", seed=1)
+    for gtype in GRAPHICS:
+        for variant in ("stack", "split", "top"):
+            r.cover_variant = variant
+            r.point_offset = 0
+            slide = {"kind": "cover", "title": "A short headline", "caption": "A caption", "graphic": {"type": gtype}}
+            img = r.render_slide(slide, 0, 1, "single", "Kicker")
+            assert img.size == (1080, 1350)
+        for n in (1, 3):
+            r.render_slide({"kind": "point", "title": "Point", "graphic": {"type": gtype}}, n, 6, "carousel", "", n)
+    assert r.truncations == 0
+
+
+def test_old_history_content_still_renders(cfg, tmp_path):
+    """Posts generated before the graphic-first redesign can still be re-themed."""
+    old = {"format": "single", "slides": [{"kind": "myth_reality", "title": "Accessible colour",
+                                           "myth": "It looks dull", "reality": "Keep the brand colour", "visual": "contrast"}]}
+    out = Renderer(cfg, "glass").render_post(old, tmp_path)
+    assert len(out["images"]) == 1
+
+
+def test_variety_between_posts(cfg):
+    """Different posts get different layouts or illustration colours."""
+    combos = set()
+    for seed in range(12):
+        r = Renderer(cfg, "grid", seed=seed)
+        r._rng("layout")
+        combos.add((r.ui.accent2, r._rng("layout").choice(["stack", "split", "top"])))
+    assert len(combos) >= 5
