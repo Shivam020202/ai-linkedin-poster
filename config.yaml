@@ -22,6 +22,12 @@ image:
   - glass
   - tiles
   - skeuo
+  - aurora
+  - editorial
+  - brutal
+  - noir
+  - blueprint
+  - clay
 schedule:
   timezone: Asia/Kolkata
   times:

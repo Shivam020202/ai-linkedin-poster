@@ -33,7 +33,8 @@ DEFAULTS: dict = {
     "image": {
         "width": 1080,
         "height": 1350,
-        "themes": ["grid", "accent", "gradient", "glass", "tiles", "skeuo"],
+        "themes": ["grid", "accent", "gradient", "glass", "tiles", "skeuo",
+                   "aurora", "editorial", "brutal", "noir", "blueprint", "clay"],
     },
     "schedule": {
         "timezone": "Asia/Kolkata",

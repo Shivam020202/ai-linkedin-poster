@@ -90,13 +90,19 @@ Check the connection any time with `python bot.py test`.
 ## Images
 
 - 1080×1350 (4:5) by default. Change it with `image.width` / `image.height`.
-- Six themes, rotating least recently used first:
+- Twelve themes, rotating least recently used first:
   - `grid`: light background with a faint 8-pt grid
   - `accent`: solid brand colour
   - `gradient`: deep mesh gradient with grain and frosted cards
   - `glass`: liquid glass, with vivid blurred colour behind frosted panels and specular rims
   - `tiles`: sharp Bauhaus tile strips, square corners and hard shadows
   - `skeuo`: skeuomorphic textured paper with raised, stitched cards and embossed titles
+  - `aurora`: dark night sky with soft ribbons of light and stars
+  - `editorial`: warm newsprint with masthead rules and serif headlines
+  - `brutal`: neo-brutalist bright colour, thick black frame and chunky outlined shapes
+  - `noir`: near-black with a dot grid, accent crop marks and a soft glow
+  - `blueprint`: blue technical drawing grid with Space Grotesk headlines
+  - `clay`: soft pastel backdrop with puffy, shaded claymorphism blobs
 
   Keep your favourites in `image.themes`, or fix one with `/theme glass`. Every painted background is checked against WCAG AA on its **actual pixels**, and dimmed or adjusted until all text passes.
 - Text **auto-fits**: it wraps, then shrinks, and only as a last resort gets cut short with "…". It never overflows. The model is told the per-field character limits.

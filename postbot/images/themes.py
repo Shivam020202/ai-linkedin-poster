@@ -10,7 +10,8 @@ from .contrast import AA_BODY, AA_LARGE, Color, contrast_ratio, ensure_contrast,
 
 log = logging.getLogger("themes")
 
-THEME_NAMES = ["grid", "accent", "gradient", "glass", "tiles", "skeuo"]
+THEME_NAMES = ["grid", "accent", "gradient", "glass", "tiles", "skeuo",
+               "aurora", "editorial", "brutal", "noir", "blueprint", "clay"]
 WHITE: Color = (255, 255, 255)
 BLACK: Color = (0, 0, 0)
 GOOD: Color = (22, 163, 74)   # green for "do"/pass markers
@@ -36,6 +37,7 @@ class Theme:
     radius: float = 1.0          # corner-radius multiplier (tiles = 0, sharp)
     emboss: Color | None = None  # letterpress highlight under titles (skeuo)
     palette: tuple = ()          # extra colours for painted backgrounds
+    heading_font: str | None = None  # overrides the configured heading font (e.g. serif for editorial)
 
 
 def shift(c: Color, hue: float = 0.0, sat: float = 1.0, val: float = 1.0) -> Color:
@@ -98,6 +100,39 @@ def build_theme(name: str, brand: dict) -> Theme:
         t = Theme(name, paper, ink, mix(ink, paper, 0.1), mix(ink, paper, 0.3), shift(v, 0, 1.0, 0.8), WHITE,
                   (246, 242, 234), ink, (196, 184, 164), "none", title_weight=800, style="skeuo",
                   radius=1.1, emboss=(250, 246, 238))
+    elif name == "aurora":
+        h = hue(v)
+        base = hsv(h - 160, 0.7, 0.10)
+        t = Theme(name, base, WHITE, mix(WHITE, base, 0.08), mix(WHITE, base, 0.3), hsv(h + 120, 0.55, 1.0), d,
+                  mix(base, WHITE, 0.1), WHITE, mix(base, WHITE, 0.2), "none", title_weight=750, style="aurora",
+                  radius=1.2, palette=(hsv(h + 120, 0.8, 0.9), hsv(h + 170, 0.7, 0.85), hsv(h - 40, 0.75, 0.9)))
+    elif name == "editorial":
+        paper, ink = (247, 243, 234), (28, 24, 20)
+        t = Theme(name, paper, ink, mix(ink, paper, 0.12), mix(ink, paper, 0.35), shift(v, 0, 1.0, 0.85), WHITE,
+                  WHITE, ink, (205, 196, 180), "none", title_weight=400, body_weight=400, style="editorial",
+                  radius=0.3, heading_font="dm-serif-display")
+    elif name == "brutal":
+        h = hue(v)
+        bg = hsv(h + 45, 0.32, 1.0)
+        t = Theme(name, bg, BLACK, (20, 20, 20), (40, 40, 40), BLACK, bg, WHITE, BLACK, BLACK, "none",
+                  title_weight=900, body_weight=600, style="brutal", radius=0.5,
+                  palette=(v, hsv(h + 160, 0.7, 0.9), hsv(h - 50, 0.8, 1.0)))
+    elif name == "noir":
+        bg = (11, 11, 13)
+        t = Theme(name, bg, (246, 246, 246), (200, 200, 205), (150, 150, 158), v, bg, (28, 28, 32), WHITE,
+                  (40, 40, 46), "none", title_weight=800, style="noir", radius=0.8)
+    elif name == "blueprint":
+        bg = (18, 62, 140)
+        t = Theme(name, bg, WHITE, (225, 236, 255), (180, 205, 245), (255, 214, 102), (18, 40, 90),
+                  mix(bg, WHITE, 0.1), WHITE, (90, 140, 220), "none", title_weight=750, style="blueprint",
+                  radius=0.4, heading_font="space-grotesk")
+    elif name == "clay":
+        h = hue(v)
+        bg = hsv(h + 200, 0.10, 0.97)
+        ink = (40, 36, 60)
+        t = Theme(name, bg, ink, mix(ink, bg, 0.1), mix(ink, bg, 0.32), shift(v, 0, 0.9, 0.85), WHITE, WHITE, ink,
+                  mix(bg, ink, 0.1), "none", title_weight=800, style="clay", radius=1.6,
+                  palette=(hsv(h, 0.35, 1.0), hsv(h + 120, 0.3, 1.0), hsv(h + 220, 0.3, 1.0)))
     else:  # grid
         t = Theme("grid", l, d, mix(d, l, 0.15), mix(d, l, 0.4), p, WHITE, WHITE, d,
                   mix(l, p, 0.12), "grid")

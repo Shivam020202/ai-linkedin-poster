@@ -61,7 +61,7 @@ class Renderer:
         self.M = round(80 * self.k)
         self.styler = Styler(get_theme(theme_name, cfg["brand"]), self.IW, self.IH, self.k, self.M)
         self.background, self.theme = self.styler.prepare()  # theme colours re-checked on real pixels
-        self.heading = cfg["fonts"]["heading"]
+        self.heading = self.theme.heading_font or cfg["fonts"]["heading"]
         self.body = cfg["fonts"]["body"]
         self.serif = cfg["fonts"].get("serif", "dm-serif-display")
         self.seed = seed if seed is not None else random.randrange(1 << 30)

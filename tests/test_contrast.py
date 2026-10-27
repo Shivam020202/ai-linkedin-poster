@@ -28,7 +28,8 @@ def test_every_theme_passes_for_any_brand(primary, secondary, name):
 
 @pytest.mark.parametrize("primary,secondary", [("#111827", "#FF6B4A"), ("#4F46E5", "#F59E0B"),
                                                ("#6A994E", "#53599A"), ("#FFEE00", "#AAAAAA")])
-@pytest.mark.parametrize("name", ["gradient", "glass", "tiles", "skeuo"])
+@pytest.mark.parametrize("name", ["gradient", "glass", "tiles", "skeuo", "aurora", "editorial", "brutal", "noir",
+                                  "blueprint", "clay"])
 def test_painted_backgrounds_pass_on_real_pixels(cfg, primary, secondary, name):
     """Text colours are checked against the actual painted background, not an average colour."""
     from postbot.images.render import Renderer

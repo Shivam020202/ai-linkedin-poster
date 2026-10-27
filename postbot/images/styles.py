@@ -6,6 +6,7 @@ or the text colour adjusted until it passes. Translucent panels do the same for 
 """
 from __future__ import annotations
 
+import math
 import random
 from dataclasses import replace
 
@@ -32,6 +33,16 @@ def _worst(color: Color, samples: list[Color]) -> Color:
     return min(samples, key=lambda s: contrast_ratio(color, s))
 
 
+def _ensure_all(color: Color, samples: list[Color], ratio: float) -> Color:
+    """Adjust color until it passes against every sample (the worst pixel can change as the colour moves)."""
+    for _ in range(8):
+        worst = _worst(color, samples)
+        if contrast_ratio(color, worst) >= ratio:
+            break
+        color = ensure_contrast(color, worst, ratio + 0.05)
+    return color
+
+
 def _vgradient(size, top: Color, bottom: Color) -> Image.Image:
     mask = Image.linear_gradient("L").resize(size)
     return Image.composite(Image.new("RGB", size, bottom), Image.new("RGB", size, top), mask)
@@ -55,8 +66,10 @@ class Styler:
     def prepare(self) -> tuple[Image.Image, Theme]:
         """Paint the background once and return it with contrast-checked theme colours."""
         t = self.t
-        painter = {"gradient": self._bg_gradient, "glass": self._bg_glass,
-                   "tiles": self._bg_tiles, "skeuo": self._bg_skeuo}.get(t.style)
+        painter = {"gradient": self._bg_gradient, "glass": self._bg_glass, "tiles": self._bg_tiles,
+                   "skeuo": self._bg_skeuo, "aurora": self._bg_aurora, "editorial": self._bg_editorial,
+                   "brutal": self._bg_brutal, "noir": self._bg_noir, "blueprint": self._bg_blueprint,
+                   "clay": self._bg_clay}.get(t.style)
         if painter is None:
             return Image.new("RGB", (self.W, self.H), t.bg), t
         img = painter()
@@ -73,9 +86,9 @@ class Styler:
         avg = img.crop(content).resize((1, 1), Image.BOX).getpixel((0, 0))
         fixed = replace(
             t, bg=avg,
-            body=ensure_contrast(t.body, _worst(t.body, samples), AA_BODY),
-            muted=ensure_contrast(t.muted, _worst(t.muted, samples), AA_BODY),
-            accent=ensure_contrast(t.accent, _worst(t.accent, samples), AA_LARGE),
+            body=_ensure_all(t.body, samples, AA_BODY),
+            muted=_ensure_all(t.muted, samples, AA_BODY),
+            accent=_ensure_all(t.accent, samples, AA_LARGE),
         )
         fixed = replace(fixed, on_accent=ensure_contrast(fixed.on_accent, fixed.accent, AA_BODY))
         self.t = fixed
@@ -143,6 +156,124 @@ class Styler:
         vignette = Image.radial_gradient("L").resize((self.W, self.H), Image.BICUBIC)
         vignette = vignette.point(lambda v: max(0, v - 120) * 0.45)
         img.paste((70, 52, 36), (0, 0), vignette)
+        return img
+
+    def _bg_aurora(self) -> Image.Image:
+        """Dark sky with soft ribbons of light and a few stars."""
+        t = self.t
+        sw, sh = self.W // 8, self.H // 8
+        small = Image.new("RGB", (sw, sh), t.bg)
+        d = ImageDraw.Draw(small)
+        for k, color in enumerate(t.palette):
+            pts = []
+            for i in range(0, 41):
+                x = sw * i / 40
+                y = sh * (0.18 + 0.2 * k) + math.sin(i / 40 * math.pi * 2 + k * 1.7) * sh * 0.08
+                pts.append((x, y))
+            d.line(pts, fill=color, width=int(sh * 0.07), joint="curve")
+        small = small.filter(ImageFilter.GaussianBlur(sh * 0.05))
+        img = small.resize((self.W, self.H), Image.BICUBIC)
+        d = ImageDraw.Draw(img)
+        for _ in range(70):
+            x, y, r = self.rng.random() * self.W, self.rng.random() * self.H * 0.6, self.rng.choice((1, 1, 2)) * self.k
+            d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 255, 255))
+        return self._grain(img, 0.025)
+
+    def _bg_editorial(self) -> Image.Image:
+        """Newsprint: warm paper, a masthead double rule and faint column lines."""
+        t = self.t
+        img = self._grain(Image.new("RGB", (self.W, self.H), t.bg), 0.03)
+        d = ImageDraw.Draw(img)
+        y = self.M - self.px(26)
+        d.line([(self.M, y), (self.W - self.M, y)], fill=t.fg, width=self.px(4))
+        d.line([(self.M, y + self.px(9)), (self.W - self.M, y + self.px(9))], fill=t.fg, width=max(1, self.px(1.5)))
+        for i in range(1, 4):
+            x = self.M + (self.W - 2 * self.M) * i / 4
+            d.line([(x, self.M + self.px(80)), (x, self.H - self.M - self.px(90))], fill=mix(t.bg, t.fg, 0.07),
+                   width=max(1, self.px(1)))
+        yb = self.H - self.M - self.px(76)
+        d.line([(self.M, yb), (self.W - self.M, yb)], fill=t.fg, width=max(1, self.px(1.5)))
+        return img
+
+    def _bg_brutal(self) -> Image.Image:
+        """Neo-brutalism: flat bright colour, thick frame, chunky black-outlined shapes in the margins
+        (kept outside the text area so they never sit under words)."""
+        t = self.t
+        img = Image.new("RGB", (self.W, self.H), t.bg)
+        d = ImageDraw.Draw(img)
+        ol = max(4, self.px(5))
+        R = self.M * 0.95
+        cx, cy = self.W - self.M * 0.15, self.M * 0.15
+        pts = [(cx + (R if i % 2 == 0 else R * 0.6) * math.cos(math.radians(i * 15)),
+                cy + (R if i % 2 == 0 else R * 0.6) * math.sin(math.radians(i * 15))) for i in range(24)]
+        d.polygon(pts, fill=t.palette[0], outline=BLACK, width=ol)
+        r = int(self.M * 1.0)
+        d.pieslice((-r, self.H - r, r, self.H + r), 270, 360, fill=t.palette[1], outline=BLACK, width=ol)
+        ph = int(self.M * 0.55)
+        d.rounded_rectangle((self.W - self.px(300), self.H - ph, self.W + self.px(40), self.H + self.px(40)),
+                            radius=ph, fill=t.palette[2], outline=BLACK, width=ol)
+        d.rectangle((0, 0, self.W - 1, self.H - 1), outline=BLACK, width=self.px(12))
+        return img
+
+    def _bg_noir(self) -> Image.Image:
+        """Near-black with a faint dot grid, accent crop marks and a soft glow."""
+        t = self.t
+        img = Image.new("RGB", (self.W, self.H), t.bg)
+        d = ImageDraw.Draw(img)
+        step = self.px(36)
+        dot = mix(t.bg, WHITE, 0.09)
+        for x in range(step // 2, self.W, step):
+            for y in range(step // 2, self.H, step):
+                d.ellipse((x - self.k, y - self.k, x + self.k, y + self.k), fill=dot)
+        L, w, o = self.px(46), max(2, self.px(3)), self.px(30)
+        for (x, y, sx, sy) in ((o, o, 1, 1), (self.W - o, o, -1, 1), (o, self.H - o, 1, -1),
+                               (self.W - o, self.H - o, -1, -1)):
+            d.line([(x, y), (x + sx * L, y)], fill=t.accent, width=w)
+            d.line([(x, y), (x, y + sy * L)], fill=t.accent, width=w)
+        glow = Image.new("L", (self.W // 4, self.H // 4), 0)
+        ImageDraw.Draw(glow).ellipse((self.W // 6, self.H // 7, self.W // 3, int(self.H / 3.2)), fill=60)
+        glow = glow.filter(ImageFilter.GaussianBlur(self.W // 30)).resize((self.W, self.H), Image.BICUBIC)
+        img.paste(t.accent, (0, 0), glow)
+        return self._grain(img, 0.02)
+
+    def _bg_blueprint(self) -> Image.Image:
+        """Technical drawing: fine and major grid lines and a frame."""
+        t = self.t
+        img = Image.new("RGB", (self.W, self.H), t.bg)
+        d = ImageDraw.Draw(img)
+        fine, major = self.px(27), self.px(135)
+        for x in range(0, self.W, fine):
+            d.line([(x, 0), (x, self.H)], fill=mix(t.bg, WHITE, 0.07 if x % major else 0.16), width=max(1, self.px(1)))
+        for y in range(0, self.H, fine):
+            d.line([(0, y), (self.W, y)], fill=mix(t.bg, WHITE, 0.07 if y % major else 0.16), width=max(1, self.px(1)))
+        o = self.px(24)
+        d.rectangle((o, o, self.W - o, self.H - o), outline=mix(t.bg, WHITE, 0.5), width=max(2, self.px(2)))
+        return img
+
+    def _bg_clay(self) -> Image.Image:
+        """Soft pastel claymorphism: puffy shaded blobs on a light backdrop."""
+        t = self.t
+        img = Image.new("RGB", (self.W, self.H), t.bg)
+        for (cx, cy, r), color in zip(((0.94, 0.06, 0.22), (0.0, 0.60, 0.15), (0.90, 0.97, 0.19)), t.palette):
+            R = int(r * self.W)
+            blob = Image.new("RGBA", (2 * R, 2 * R), (0, 0, 0, 0))
+            ImageDraw.Draw(blob).ellipse((0, 0, 2 * R - 1, 2 * R - 1), fill=(*color, 255))
+            shade = Image.radial_gradient("L").resize((2 * R, 2 * R)).point(lambda v: int(min(255, v * v / 255 * 0.55)))
+            dark = Image.new("RGBA", blob.size, (*mix(color, BLACK, 0.4), 255))
+            dark.putalpha(ImageChops.multiply(shade, blob.getchannel("A")))
+            blob.alpha_composite(dark)
+            hl = Image.new("L", blob.size, 0)  # soft specular highlight, top-left: the 'puffy clay' look
+            ImageDraw.Draw(hl).ellipse((int(0.35 * R), int(0.25 * R), int(1.05 * R), int(0.8 * R)), fill=150)
+            hl = ImageChops.multiply(hl.filter(ImageFilter.GaussianBlur(R // 5)), blob.getchannel("A"))
+            white = Image.new("RGBA", blob.size, (255, 255, 255, 255))
+            white.putalpha(hl)
+            blob.alpha_composite(white)
+            sh = Image.new("L", (int(2.4 * R), int(2.4 * R)), 0)
+            ImageDraw.Draw(sh).ellipse((int(0.2 * R), int(0.3 * R), int(2.2 * R), int(2.3 * R)), fill=70)
+            sh = sh.filter(ImageFilter.GaussianBlur(R // 6))
+            x, y = int(cx * self.W - R), int(cy * self.H - R)
+            img.paste(mix(t.bg, BLACK, 0.25), (x - int(0.2 * R), y), sh)
+            img.paste(blob, (x, y), blob)
         return img
 
     def _grain(self, img: Image.Image, amount: float) -> Image.Image:
