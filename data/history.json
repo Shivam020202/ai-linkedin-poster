@@ -159,6 +159,38 @@
       "project": null,
       "dir": "output/2026-10-27/post-2",
       "delivered": true
+    },
+    {
+      "id": "261028-1",
+      "date": "2026-10-28",
+      "slot": 0,
+      "created_at": "2026-10-28T14:21:18",
+      "topic": "Gradient meshes and grainy textures done tastefully",
+      "category": "modern_trends",
+      "format": "checklist",
+      "angle": "quick_tip",
+      "voice": "Playful and curious: 'what if we tried…', then show what happens.",
+      "theme": "aurora",
+      "hook": "What if we stopped using raw vector gradients and added 3% Gaussian noise over a blurred mesh?",
+      "project": null,
+      "dir": "output/2026-10-28/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261028-2",
+      "date": "2026-10-28",
+      "slot": 1,
+      "created_at": "2026-10-28T14:22:44",
+      "topic": "When a hamburger menu is the right call and when it hides your product",
+      "category": "breaking_norms",
+      "format": "carousel",
+      "angle": "breakdown",
+      "voice": "Share a mistake you used to make and what you do now.",
+      "theme": "editorial",
+      "hook": "I used to shove every mobile navigation link into a hamburger menu just to keep the header looking empty.",
+      "project": null,
+      "dir": "output/2026-10-28/post-2",
+      "delivered": true
     }
   ]
 }
