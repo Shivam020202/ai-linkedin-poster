@@ -191,6 +191,54 @@
       "project": null,
       "dir": "output/2026-10-28/post-2",
       "delivered": true
+    },
+    {
+      "id": "261029-1",
+      "date": "2026-10-29",
+      "slot": 0,
+      "created_at": "2026-10-29T14:40:48",
+      "topic": "Designing a whole screen in greyscale before adding any colour",
+      "category": "experiments",
+      "format": "single",
+      "angle": "myth_vs_reality",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "brutal",
+      "hook": "Designing a screen in greyscale first saves color decisions later.",
+      "project": null,
+      "dir": "output/2026-10-29/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261029-2",
+      "date": "2026-10-29",
+      "slot": 1,
+      "created_at": "2026-10-29T14:41:30",
+      "topic": "Prototyping micro-interactions before the static screens",
+      "category": "experiments",
+      "format": "quote",
+      "angle": "insight",
+      "voice": "Lead with a question a junior designer asked you, then answer it.",
+      "theme": "noir",
+      "hook": "\"Should I prototype micro-interactions before designing the static screens?\" a junior designer asked me last week.",
+      "project": null,
+      "dir": "output/2026-10-29/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261029-v1",
+      "date": "2026-10-29",
+      "slot": 99,
+      "created_at": "2026-10-29T14:47:10",
+      "topic": "\"Consistency means everything must look the same\"",
+      "category": "misconceptions",
+      "format": "video",
+      "angle": "video",
+      "voice": "Direct teaching voice: state the rule, then show it.",
+      "theme": "blueprint",
+      "hook": "Strict visual consistency can actually ruin your product's usability.",
+      "project": null,
+      "dir": "output/2026-10-29/video-1",
+      "delivered": true
     }
   ]
 }
