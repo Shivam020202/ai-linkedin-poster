@@ -120,6 +120,20 @@ class TelegramAPI:
             return self.call("sendDocument", {"chat_id": chat_id, "caption": caption},
                              files={"document": fh}, timeout=180)
 
+    def send_video(self, chat_id, path: Path, caption: str | None = None, width: int | None = None,
+                   height: int | None = None, duration: float | None = None, thumbnail: Path | None = None):
+        """Upload an MP4 (bots can send up to 50 MB). Larger files go as documents."""
+        if Path(path).stat().st_size > 49 * 1024 * 1024:
+            return self.send_document(chat_id, path, caption)
+        with ExitStack() as stack:
+            files = {"video": stack.enter_context(open(path, "rb"))}
+            if thumbnail and Path(thumbnail).exists():
+                files["thumbnail"] = stack.enter_context(open(thumbnail, "rb"))
+            return self.call("sendVideo", {
+                "chat_id": chat_id, "caption": caption, "width": width, "height": height,
+                "duration": int(round(duration)) if duration else None, "supports_streaming": True,
+            }, files=files, timeout=300)
+
     def get_updates(self, offset: int = 0, timeout: int = 25) -> list[dict]:
         return self.call("getUpdates", {
             "offset": offset, "timeout": timeout,

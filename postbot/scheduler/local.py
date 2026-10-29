@@ -14,6 +14,7 @@ from ..storage import Store
 from ..telegram.api import TelegramAPI
 from ..telegram.delivery import send_error
 from ..telegram.listener import COMMANDS, Listener, next_run_text
+from ..video_pipeline import run_video_slot, video_due
 
 log = logging.getLogger("scheduler")
 GRACE = timedelta(hours=2)  # a slot missed by more than this (PC asleep) is skipped, not posted late
@@ -68,7 +69,7 @@ def run_forever(cfg: dict) -> None:
     poll_api.send_message(chat_id, f"🟢 Bot is running. Next scheduled post {next_run_text(cfg, times)}. /help")
     log.info("running — times %s %s. Ctrl+C to stop.", times, cfg["schedule"]["timezone"])
 
-    queued: dict[str, set[int]] = {}
+    queued: dict[str, set] = {}
 
     def tick():
         while not stop.is_set():
@@ -82,6 +83,10 @@ def run_forever(cfg: dict) -> None:
                     log.info("slot %d due — queueing", slot)
                     worker.submit(f"Scheduled post (slot {slot + 1})",
                                   lambda s=slot: run_slot(cfg, store, chain, s, interactive=True))
+                if (video_due(cfg, store, now, schedule_times(cfg, store)) and "video" not in q
+                        and not store.state()["paused"]):
+                    q.add("video")
+                    worker.submit("Daily video", lambda: run_video_slot(cfg, store, chain, interactive=True))
             except Exception:  # noqa: BLE001
                 log.exception("scheduler tick failed")
             stop.wait(20)

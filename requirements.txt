@@ -1,4 +1,5 @@
 requests>=2.31
 Pillow>=10.0
 PyYAML>=6.0
+imageio-ffmpeg>=0.5  # bundled FFmpeg for the video engine (only used if ffmpeg isn't installed)
 tzdata; sys_platform == "win32"

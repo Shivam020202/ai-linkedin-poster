@@ -73,6 +73,11 @@ FORMAT_GUIDE = {
 
 ANGLE_GUIDE = {
     "tips": "ANGLE: practical tips — teach one skill with concrete examples.",
+    "video": "ANGLE: short MOTION VIDEO script (~20 seconds), not a static carousel. Exactly 6 slides: cover, "
+             "4 points, cta (no checklist). Each slide is on screen for ~3.5 seconds, so headlines must be at most "
+             "6 words and captions empty or at most 8 words. Choose graphics that animate well and differ on every "
+             "slide: steps, compare, timeline, icons, layers, phone, browser, components. post_text is the LinkedIn "
+             "caption that goes with the video.",
     "breakdown": "ANGLE: breakdown — take the subject apart step by step: what it is, why it works (or why "
                  "people get it wrong), and exactly how to apply it, with a concrete example per slide.",
     "case_study": "ANGLE: mini case study / teardown — walk through a real-feeling UI scenario step by step, "

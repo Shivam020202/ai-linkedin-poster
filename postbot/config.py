@@ -66,6 +66,14 @@ DEFAULTS: dict = {
         "ollama_url": "http://localhost:11434",
         "temperature": 0.9,
     },
+    "video": {
+        "enabled": True,        # one motion video per day
+        "time": None,           # "HH:MM"; default = first posting time
+        "formats": ["4:5"],     # any of 4:5, 9:16, 1:1, 16:9 — each gets its own layout
+        "fps": 30,
+        "audio": True,          # original synthesised soundtrack synced to the visuals
+        "music": "",            # optional path to your own (licensed) audio file
+    },
     "telegram": {
         "linkedin_url": "https://www.linkedin.com/feed/",
         "text_style": "code",  # "code" = tap-to-copy block, "plain" = normal text

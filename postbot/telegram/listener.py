@@ -20,6 +20,7 @@ log = logging.getLogger("listener")
 COMMANDS = [
     ("now", "generate a post immediately"),
     ("post", "<topic> — generate on a specific topic"),
+    ("video", "[topic] — make a motion video now"),
     ("topics", "show upcoming topics"),
     ("add", "<topic> — add a topic"),
     ("remove", "<topic> — remove a topic"),
@@ -138,6 +139,18 @@ class Listener:
             return
         self._make(f"Writing about “{arg[:80]}”", topic_text=arg[:200])
 
+    def cmd_video(self, arg):
+        from ..video_pipeline import build_video
+
+        def job():
+            day = now_local(self.cfg).date()
+            post = build_video(self.cfg, self.store, self.chain, day=day, topic_text=arg[:200] or None)
+            from .delivery import send_video_post
+            send_video_post(self.api, self.chat_id, self.cfg, post, interactive=True)
+            self.store.update_post(post["id"], delivered=True)
+        self.reply("🎬 Making a video — this takes a minute or two…")
+        self.enqueue("Video", job)
+
     def cmd_topics(self, arg):
         c = self.cfg["content"]
         nxt = upcoming(load_topics(), self.store.history(), now_local(self.cfg).date(), 10,
@@ -210,10 +223,26 @@ class Listener:
             f"Theme: {st['theme'] or 'rotating'} · AI: {self.cfg['ai']['provider']}")
 
     # ---- buttons --------------------------------------------------------
+    def _video_button(self, cq: dict, action: str, post_id: str) -> None:
+        from ..video_pipeline import regenerate_video
+        from .delivery import send_video_post
+        label = "Making a new video" if action == "vnew" else "Re-rendering the video in another theme"
+        self.api.answer_callback(cq["id"], label + "…")
+
+        def job():
+            post = regenerate_video(self.cfg, self.store, self.chain, post_id, action)
+            send_video_post(self.api, self.chat_id, self.cfg, post, interactive=True)
+            self.store.update_post(post["id"], delivered=True)
+        self.reply(f"⏳ {label}…")
+        self.enqueue(label, job)
+
     def on_button(self, cq: dict) -> None:
         data = cq.get("data", "")
         parts = data.split(":")
         action, post_id = parts[0], parts[-1]
+        if action in ("vnew", "vtheme"):
+            self._video_button(cq, action, post_id)
+            return
         theme = parts[1] if action == "theme" and len(parts) == 3 else None
         labels = {"regen": "Regenerating", "short": "Shortening", "topic": "Picking a different topic",
                   "theme": "Re-rendering in another theme" if theme == "next" else f"Re-rendering in {theme} theme"}

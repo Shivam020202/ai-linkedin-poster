@@ -106,6 +106,7 @@ def g_compare(spec, w, h, ctx):
     winner = spec.get("winner", "right")
     obj = layer(w, h)
     ph_h = int(h * 0.80)
+    placed = []
     for i in range(2):
         scr = screens[i]
         if scr in WEB:
@@ -115,13 +116,18 @@ def g_compare(spec, w, h, ctx):
         dev = rotate(dev, 4 if i == 0 else -4)
         dev = _shadow(dev, ctx, 30, 26, 0.35)
         dev = fit_into(dev, w * 0.52, h * 0.86)
+        placed.append(dev)
+    dev_h = max(d.height for d in placed)
+    for i, dev in enumerate(placed):
         x = int(w * (0.25 + 0.5 * i) - dev.width / 2)
-        obj.alpha_composite(dev, (x, 0))
+        obj.alpha_composite(dev, (x, (dev_h - dev.height) // 2))
         ok = (i == 1) == (winner == "right") if winner in ("left", "right") else None
         col = GOOD if ok else BAD if ok is False else CARD_INK
         pill = _pill(ctx, labels[i][:16], 26, WHITE, col, "check" if ok else "cross" if ok is False else None, col)
         pill = _shadow(pill, ctx, 12, 8, 0.25)
-        obj.alpha_composite(pill, (int(w * (0.25 + 0.5 * i) - pill.width / 2), h - pill.height))
+        # labels sit right under the devices, not at the bottom of a tall box
+        py = min(h - pill.height, int(dev_h * 0.97))
+        obj.alpha_composite(pill, (int(w * (0.25 + 0.5 * i) - pill.width / 2), py))
     return obj
 
 
@@ -231,7 +237,7 @@ def g_spectrum(spec, w, h, ctx):
     pos = max(0.05, min(0.95, float(spec.get("marker", 65) or 65) / 100))
     label = str(spec.get("marker_label", "Sweet spot"))[:18]
     obj = layer(w, h)
-    track_h = int(h * 0.12)
+    track_h = int(min(h * 0.12, w * 0.075))
     tw = int(w * 0.9)
     tx, ty = int(w * 0.05), int(h * 0.48)
     track = diag_gradient((tw, track_h), mix(ctx.a, WHITE, 0.15), ctx.b)

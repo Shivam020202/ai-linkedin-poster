@@ -130,6 +130,31 @@ Check the connection any time with `python bot.py test`.
 
 Everything for a post is saved in `output/YYYY-MM-DD/post-N/`: `slide-01.png…`, `carousel.pdf`, `post.txt` and `meta.json`.
 
+## Daily motion video
+
+Once a day the bot also makes a **~20-second motion video** (MP4 with sound) and sends it to Telegram with a ready-to-paste caption.
+
+**How it works** (the "programmable animation" approach: code draws every frame, rather than an AI video model):
+- **Script:** Gemini writes a 6-scene script (cover, 4 points, CTA) in the same graphic-first format as the slides, from the same topic rotation.
+- **`seek(t)` engine:** every frame is a pure function of time. Layers (headline words, graphics, chrome) are prepared once; any frame can be drawn on its own. The same `t` always gives the same frame, with no state carried over from earlier frames.
+- **Motion:** closed-form springs (exact at any `t`, no simulation).
+  - Headlines rise word by word from behind their line, and captions follow once the words land.
+  - Devices spring up with a slow push-in; steps, timelines and comparisons reveal item by item; checklists and layers wipe in; badges pop with a little overshoot.
+  - A soft exit before each cut, and a progress bar along the bottom.
+- **Sound:** an original soundtrack synthesised for each video: a chord pad that changes with each scene, whooshes on cuts, and pops when graphics land. Set `video.music` to use your own licensed track instead.
+- **Formats:** `4:5` by default; add `9:16`, `1:1` or `16:9` under `video.formats`. Each format gets its own layout (16:9 puts text beside the graphic), not a crop.
+- **Quality control:** after encoding, the bot checks the duration, looks for blank frames and text that had to be shortened, and saves `contact-sheet.png`. Any issues appear in the Telegram message.
+- **Encoding:** frames are streamed straight into FFmpeg (H.264 + AAC, `+faststart`), with no temporary PNGs. The system FFmpeg is used when installed; otherwise the bundled `imageio-ffmpeg` binary.
+
+| Do | Command |
+|---|---|
+| Make one now | `python bot.py video` (`--dry-run`, `--offline`, `--topic "…"`, `--theme noir`, `--formats 4:5,9:16`) |
+| From Telegram | `/video` or `/video <topic>`; buttons: **🎬 New video**, **🎨 Another theme** |
+| Schedule | `video.time` in `config.yaml` (default: your first posting time). GitHub Actions makes it on the same run as the posts. |
+| Turn off | `video.enabled: false`, or `generate_once.py --no-video` |
+
+Files are saved in `output/YYYY-MM-DD/video-N/`: `video-4x5.mp4`, `poster.png`, `contact-sheet.png`, `post.txt` and `meta.json`. To post: on LinkedIn, **Start a post → Add media**, upload the MP4, then paste the text.
+
 ## Running it
 
 ### A. Local mode (on your computer)

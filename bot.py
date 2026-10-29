@@ -6,6 +6,7 @@
   python bot.py preview                     render sample posts in every theme → preview/
   python bot.py now [--dry-run]             make one post right now (and send it)
   python bot.py once [--dry-run] [--all]    make the posts that are due today, then exit (cron / Actions)
+  python bot.py video [--dry-run]           make a motion video now (and send it)
   python bot.py run                         keep running: schedule + Telegram commands & buttons
   python bot.py topics                      show upcoming topics
   python bot.py cron                        print GitHub Actions cron lines for your times
@@ -89,7 +90,8 @@ def cmd_once(cfg, args) -> int:
         # every slot whose time has passed today and hasn't run yet (catches up a missed run)
         slots = [i for i, t in enumerate(times) if now.strftime("%H:%M") >= t
                  and not store.slot_done(now.date().isoformat(), i)]
-    if not slots:
+    from postbot.video_pipeline import video_due as _vdue
+    if not slots and not (_vdue(cfg, store, now, times) and not args.no_video):
         print(f"Nothing due right now ({now:%H:%M} {cfg['schedule']['timezone']}; times {', '.join(times)}). "
               "Use --all to generate today's posts anyway.")
         return 0
@@ -100,9 +102,36 @@ def cmd_once(cfg, args) -> int:
                         offline=args.offline, force=args.all or args.slot is not None,
                         interactive=args.buttons)
         made, failed = made + m, failed + f
-    print(f"✓ {made} post(s) created" + (" (dry run)" if args.dry_run else " and sent")
+    # today's motion video (same run, so GitHub Actions needs no extra schedule)
+    from postbot.video_pipeline import run_video_slot, video_due, video_settings
+    if not args.no_video and video_settings(cfg)["enabled"] and (args.all or video_due(cfg, store, now, times)):
+        m, f = run_video_slot(cfg, store, chain, day=now.date(), dry_run=args.dry_run, offline=args.offline,
+                              force=args.all, interactive=args.buttons)
+        made, failed = made + m, failed + f
+    print(f"✓ {made} item(s) created" + (" (dry run)" if args.dry_run else " and sent")
           + (f", {failed} failed (see bot.log)" if failed else ""))
     return 1 if failed else 0
+
+
+def cmd_video(cfg, args) -> int:
+    from postbot.pipeline import now_local, telegram
+    from postbot.storage import Store
+    from postbot.telegram.delivery import send_video_post
+    from postbot.video_pipeline import build_video, print_video
+    _ensure_fonts(cfg)
+    store = Store()
+    post = build_video(cfg, store, _chain(cfg, args), day=now_local(cfg).date(), topic_text=args.topic,
+                       theme=args.theme, offline=args.offline, record=not args.dry_run,
+                       formats=args.formats.split(",") if args.formats else None)
+    print_video(post)
+    if args.dry_run:
+        print("\n(dry run — nothing sent)")
+        return 0
+    api, chat_id = telegram()
+    send_video_post(api, chat_id, cfg, post)
+    store.update_post(post["id"], delivered=True)
+    print("✓ Sent to Telegram")
+    return 0
 
 
 def cmd_run(cfg, args) -> int:
@@ -163,6 +192,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--all", action="store_true", help="make all of today's posts now")
     p.add_argument("--slot", type=int, help="run one specific slot (0 = first time of day)")
     p.add_argument("--buttons", action="store_true", help="add Regenerate/… buttons (needs `run` listening)")
+    p.add_argument("--no-video", action="store_true", help="skip today's motion video")
+
+    p = sub.add_parser("video", help="make a motion video now")
+    gen_flags(p)
+    p.add_argument("--topic", help="make the video about this topic")
+    p.add_argument("--theme", help="template, e.g. glass, noir, blueprint")
+    p.add_argument("--formats", help="comma-separated: 4:5,9:16,1:1,16:9 (default from config)")
 
     sub.add_parser("run", help="keep running: scheduler + Telegram commands")
     sub.add_parser("cron", help="print GitHub Actions cron lines (UTC) for your posting times")
@@ -180,7 +216,8 @@ def main(argv=None) -> int:
     setup_logging(args.verbose)
     cfg = load_config()
     handlers = {"test": cmd_test, "preview": cmd_preview, "now": cmd_now, "once": cmd_once,
-                "run": cmd_run, "topics": cmd_topics, "cron": cmd_cron}
+                "run": cmd_run, "topics": cmd_topics, "cron": cmd_cron,
+                "video": cmd_video}
     try:
         return handlers[args.command](cfg, args)
     except KeyboardInterrupt:
