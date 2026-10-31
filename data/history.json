@@ -271,6 +271,38 @@
       "project": null,
       "dir": "output/2026-10-30/video-1",
       "delivered": true
+    },
+    {
+      "id": "261031-1",
+      "date": "2026-10-31",
+      "slot": 0,
+      "created_at": "2026-10-31T13:48:18",
+      "topic": "Reducing decision fatigue on a pricing page",
+      "category": "problem_solving",
+      "format": "quote",
+      "angle": "reflective",
+      "voice": "Share a mistake you used to make and what you do now.",
+      "theme": "skeuo",
+      "hook": "Adding every feature comparison to a pricing page doesn't build trust—it just creates buyer anxiety.",
+      "project": null,
+      "dir": "output/2026-10-31/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261031-2",
+      "date": "2026-10-31",
+      "slot": 1,
+      "created_at": "2026-10-31T13:49:03",
+      "topic": "Micro-interactions that give feedback instead of just moving",
+      "category": "modern_trends",
+      "format": "checklist",
+      "angle": "checklist",
+      "voice": "Open with a short scenario from a recent (unnamed) project.",
+      "theme": "grid",
+      "hook": "I watched a user tap a save button three times yesterday because the animation slid without changing state.",
+      "project": null,
+      "dir": "output/2026-10-31/post-2",
+      "delivered": true
     }
   ]
 }
