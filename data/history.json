@@ -303,6 +303,54 @@
       "project": null,
       "dir": "output/2026-10-31/post-2",
       "delivered": true
+    },
+    {
+      "id": "261101-1",
+      "date": "2026-11-01",
+      "slot": 0,
+      "created_at": "2026-11-01T14:26:47",
+      "topic": "\"Dark mode is just inverted colours\"",
+      "category": "misconceptions",
+      "format": "quote",
+      "angle": "reflective",
+      "voice": "Lead with a question a junior designer asked you, then answer it.",
+      "theme": "accent",
+      "hook": "\"Can’t I just invert my light mode hex codes to make dark mode?\" a junior designer asked me on Friday.",
+      "project": null,
+      "dir": "output/2026-11-01/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261101-2",
+      "date": "2026-11-01",
+      "slot": 1,
+      "created_at": "2026-11-01T14:27:16",
+      "topic": "Writing the interface copy before drawing a single box",
+      "category": "experiments",
+      "format": "single",
+      "angle": "bold_statement",
+      "voice": "Playful and curious: 'what if we tried…', then show what happens.",
+      "theme": "gradient",
+      "hook": "I stopped opening Figma to draw boxes on new projects and started writing plain text documents instead.",
+      "project": null,
+      "dir": "output/2026-11-01/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261101-v1",
+      "date": "2026-11-01",
+      "slot": 99,
+      "created_at": "2026-11-01T14:28:02",
+      "topic": "Breaking the grid on purpose without making a mess",
+      "category": "breaking_norms",
+      "format": "video",
+      "angle": "video",
+      "voice": "Contrarian but fair: challenge a popular habit, then give the nuance.",
+      "theme": "glass",
+      "hook": "Rigidly following a 12-column grid is the fastest way to make a product feel generic.",
+      "project": null,
+      "dir": "output/2026-11-01/video-1",
+      "delivered": true
     }
   ]
 }
