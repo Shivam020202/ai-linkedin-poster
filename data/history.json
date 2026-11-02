@@ -351,6 +351,54 @@
       "project": null,
       "dir": "output/2026-11-01/video-1",
       "delivered": true
+    },
+    {
+      "id": "261102-1",
+      "date": "2026-11-02",
+      "slot": 0,
+      "created_at": "2026-11-02T17:26:33",
+      "topic": "What Google's Material Design 3 teaches about dynamic colour",
+      "category": "brand_systems",
+      "format": "carousel",
+      "angle": "tips",
+      "voice": "Direct teaching voice: state the rule, then show it.",
+      "theme": "aurora",
+      "hook": "Material Design 3’s dynamic colour system shows how a single seed can style an entire app.",
+      "project": null,
+      "dir": "output/2026-11-02/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261102-2",
+      "date": "2026-11-02",
+      "slot": 1,
+      "created_at": "2026-11-02T17:29:17",
+      "topic": "Starting from the mobile layout even for a desktop-first product",
+      "category": "experiments",
+      "format": "single",
+      "angle": "do_dont",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "editorial",
+      "hook": "I started drafting our complex B2B dashboard on a 375px frame before touching a desktop grid.",
+      "project": null,
+      "dir": "output/2026-11-02/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261102-v1",
+      "date": "2026-11-02",
+      "slot": 99,
+      "created_at": "2026-11-02T17:34:22",
+      "topic": "Classic print editorial layouts on the web",
+      "category": "retro_revival",
+      "format": "video",
+      "angle": "video",
+      "voice": "Playful and curious: 'what if we tried…', then show what happens.",
+      "theme": "brutal",
+      "hook": "What if we brought the magazine spread back to the browser?",
+      "project": null,
+      "dir": "output/2026-11-02/video-1",
+      "delivered": true
     }
   ]
 }
