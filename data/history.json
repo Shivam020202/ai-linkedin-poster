@@ -447,6 +447,54 @@
       "project": null,
       "dir": "output/2026-11-03/video-1",
       "delivered": true
+    },
+    {
+      "id": "261104-1",
+      "date": "2026-11-04",
+      "slot": 0,
+      "created_at": "2026-11-04T15:42:30",
+      "topic": "IBM Carbon and designing for dense enterprise data",
+      "category": "brand_systems",
+      "format": "checklist",
+      "angle": "quick_tip",
+      "voice": "Contrarian but fair: challenge a popular habit, then give the nuance.",
+      "theme": "tiles",
+      "hook": "Adding generous padding to every enterprise table is usually a sign of bad UX, not clean design.",
+      "project": null,
+      "dir": "output/2026-11-04/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261104-2",
+      "date": "2026-11-04",
+      "slot": 1,
+      "created_at": "2026-11-04T15:44:30",
+      "topic": "Big, opinionated typography in places we usually play safe",
+      "category": "breaking_norms",
+      "format": "carousel",
+      "angle": "breakdown",
+      "voice": "Direct teaching voice: state the rule, then show it.",
+      "theme": "skeuo",
+      "hook": "Playing it safe with quiet 14px text in complex UIs often destroys visual hierarchy.",
+      "project": null,
+      "dir": "output/2026-11-04/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261104-v1",
+      "date": "2026-11-04",
+      "slot": 99,
+      "created_at": "2026-11-04T15:46:37",
+      "topic": "Designing search for people who don't know what the thing is called",
+      "category": "problem_solving",
+      "format": "video",
+      "angle": "video",
+      "voice": "Playful and curious: 'what if we tried…', then show what happens.",
+      "theme": "grid",
+      "hook": "Most search bars fail the moment a user types \"that plastic thing on shoelaces\".",
+      "project": null,
+      "dir": "output/2026-11-04/video-1",
+      "delivered": true
     }
   ]
 }
