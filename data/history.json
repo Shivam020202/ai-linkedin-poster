@@ -495,6 +495,54 @@
       "project": null,
       "dir": "output/2026-11-04/video-1",
       "delivered": true
+    },
+    {
+      "id": "261105-1",
+      "date": "2026-11-05",
+      "slot": 0,
+      "created_at": "2026-11-05T15:44:10",
+      "topic": "Spatial and depth cues coming back after years of flat design",
+      "category": "modern_trends",
+      "format": "single",
+      "angle": "myth_vs_reality",
+      "voice": "Open with a short scenario from a recent (unnamed) project.",
+      "theme": "accent",
+      "hook": "A recent modal refactor reminded me why flat design struggled with complex UI stacks.",
+      "project": null,
+      "dir": "output/2026-11-05/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261105-2",
+      "date": "2026-11-05",
+      "slot": 1,
+      "created_at": "2026-11-05T15:46:40",
+      "topic": "Uber's Base design system and designing for glanceable, on-the-move use",
+      "category": "brand_systems",
+      "format": "quote",
+      "angle": "insight",
+      "voice": "Share a mistake you used to make and what you do now.",
+      "theme": "gradient",
+      "hook": "I used to trust dense lists for Uber drivers, until I saw them miss a tap.",
+      "project": null,
+      "dir": "output/2026-11-05/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261105-v1",
+      "date": "2026-11-05",
+      "slot": 99,
+      "created_at": "2026-11-05T15:49:15",
+      "topic": "\"More whitespace always looks more premium\"",
+      "category": "misconceptions",
+      "format": "video",
+      "angle": "video",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "glass",
+      "hook": "Adding 48px padding to every element doesn't make your product look like Apple.",
+      "project": null,
+      "dir": "output/2026-11-05/video-1",
+      "delivered": true
     }
   ]
 }
