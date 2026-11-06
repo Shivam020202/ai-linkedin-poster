@@ -543,6 +543,54 @@
       "project": null,
       "dir": "output/2026-11-05/video-1",
       "delivered": true
+    },
+    {
+      "id": "261106-1",
+      "date": "2026-11-06",
+      "slot": 0,
+      "created_at": "2026-11-06T15:18:35",
+      "topic": "Left-aligned modals and other layouts that break the centred default",
+      "category": "breaking_norms",
+      "format": "carousel",
+      "angle": "breakdown",
+      "voice": "Lead with a question a junior designer asked you, then answer it.",
+      "theme": "aurora",
+      "hook": "\"Why do we always center modals in the middle of the screen?\" a junior designer asked me yesterday.",
+      "project": null,
+      "dir": "output/2026-11-06/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261106-2",
+      "date": "2026-11-06",
+      "slot": 1,
+      "created_at": "2026-11-06T15:19:01",
+      "topic": "Y2K chrome and translucency with modern restraint",
+      "category": "retro_revival",
+      "format": "single",
+      "angle": "before_after",
+      "voice": "Direct teaching voice: state the rule, then show it.",
+      "theme": "editorial",
+      "hook": "Y2K glossy chrome is back in modern interfaces, but original 2000s textures destroy contrast.",
+      "project": null,
+      "dir": "output/2026-11-06/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261106-v1",
+      "date": "2026-11-06",
+      "slot": 99,
+      "created_at": "2026-11-06T15:19:54",
+      "topic": "Dark-first design systems",
+      "category": "modern_trends",
+      "format": "video",
+      "angle": "video",
+      "voice": "Playful and curious: 'what if we tried…', then show what happens.",
+      "theme": "brutal",
+      "hook": "What if we stopped treating dark mode as an afterthought and designed dark-first instead?",
+      "project": null,
+      "dir": "output/2026-11-06/video-1",
+      "delivered": true
     }
   ]
 }
