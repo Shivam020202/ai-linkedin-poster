@@ -687,6 +687,38 @@
       "project": null,
       "dir": "output/2026-11-08/video-1",
       "delivered": true
+    },
+    {
+      "id": "261109-1",
+      "date": "2026-11-09",
+      "slot": 1,
+      "created_at": "2026-11-09T17:52:28",
+      "topic": "\"The 3-click rule\" and why click count is the wrong metric",
+      "category": "misconceptions",
+      "format": "single",
+      "angle": "do_dont",
+      "voice": "Playful and curious: 'what if we tried…', then show what happens.",
+      "theme": "accent",
+      "hook": "The 3‑click rule sounds solid, but clicks aren’t the true measure of usability.",
+      "project": null,
+      "dir": "output/2026-11-09/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261109-v1",
+      "date": "2026-11-09",
+      "slot": 99,
+      "created_at": "2026-11-09T17:57:40",
+      "topic": "Visible, tactile toggles and switches instead of flat checkboxes",
+      "category": "retro_revival",
+      "format": "video",
+      "angle": "video",
+      "voice": "Direct teaching voice: state the rule, then show it.",
+      "theme": "gradient",
+      "hook": "Flat checkboxes feel like tiny paper cuts on a screen – replace them with tactile toggles.",
+      "project": null,
+      "dir": "output/2026-11-09/video-1",
+      "delivered": true
     }
   ]
 }
