@@ -767,6 +767,22 @@
       "project": null,
       "dir": "output/2026-11-10/video-1",
       "delivered": true
+    },
+    {
+      "id": "261111-1",
+      "date": "2026-11-11",
+      "slot": 0,
+      "created_at": "2026-11-11T15:32:26",
+      "topic": "Making waiting feel shorter when you can't make it faster",
+      "category": "problem_solving",
+      "format": "checklist",
+      "angle": "quick_tip",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "brutal",
+      "hook": "A 4-second loading spinner feels twice as long as a 4-second step-by-step status line.",
+      "project": null,
+      "dir": "output/2026-11-11/post-1",
+      "delivered": true
     }
   ]
 }
