@@ -831,6 +831,54 @@
       "project": null,
       "dir": "output/2026-11-12/video-1",
       "delivered": true
+    },
+    {
+      "id": "261113-1",
+      "date": "2026-11-13",
+      "slot": 0,
+      "created_at": "2026-11-13T15:37:29",
+      "topic": "Liquid glass and frosted surfaces without wrecking readability",
+      "category": "modern_trends",
+      "format": "carousel",
+      "angle": "breakdown",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "tiles",
+      "hook": "I opened an updated weather app last week and couldn't read the forecast against a bright cloud photo.",
+      "project": null,
+      "dir": "output/2026-11-13/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261113-2",
+      "date": "2026-11-13",
+      "slot": 1,
+      "created_at": "2026-11-13T15:40:00",
+      "topic": "Oversized, expressive typography as the main visual",
+      "category": "modern_trends",
+      "format": "single",
+      "angle": "before_after",
+      "voice": "Playful and curious: 'what if we tried…', then show what happens.",
+      "theme": "skeuo",
+      "hook": "Big headlines aren’t a gimmick – they’re a visual anchor 🔍",
+      "project": null,
+      "dir": "output/2026-11-13/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261113-v1",
+      "date": "2026-11-13",
+      "slot": 99,
+      "created_at": "2026-11-13T15:43:22",
+      "topic": "Salesforce Lightning and the design-token idea it helped popularise",
+      "category": "brand_systems",
+      "format": "video",
+      "angle": "video",
+      "voice": "Contrarian but fair: challenge a popular habit, then give the nuance.",
+      "theme": "grid",
+      "hook": "We tokenize everything in design systems before understanding what actually needs a variable.",
+      "project": null,
+      "dir": "output/2026-11-13/video-1",
+      "delivered": false
     }
   ]
 }
