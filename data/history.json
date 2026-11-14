@@ -879,6 +879,54 @@
       "project": null,
       "dir": "output/2026-11-13/video-1",
       "delivered": false
+    },
+    {
+      "id": "261114-1",
+      "date": "2026-11-14",
+      "slot": 0,
+      "created_at": "2026-11-14T14:25:25",
+      "topic": "Swiss / International Typographic Style for modern product pages",
+      "category": "retro_revival",
+      "format": "quote",
+      "angle": "reflective",
+      "voice": "Share a mistake you used to make and what you do now.",
+      "theme": "accent",
+      "hook": "I spent years adding ambient background blurs to landing pages to mask weak typographic hierarchy.",
+      "project": null,
+      "dir": "output/2026-11-14/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261114-2",
+      "date": "2026-11-14",
+      "slot": 1,
+      "created_at": "2026-11-14T14:26:55",
+      "topic": "Designing with real data from day one",
+      "category": "experiments",
+      "format": "checklist",
+      "angle": "checklist",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "gradient",
+      "hook": "Dummy text hides layout bugs until the moment you push to production.",
+      "project": null,
+      "dir": "output/2026-11-14/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261114-v1",
+      "date": "2026-11-14",
+      "slot": 99,
+      "created_at": "2026-11-14T14:27:55",
+      "topic": "Fixing \"where am I?\" confusion in deep navigation without adding breadcrumbs everywhere",
+      "category": "problem_solving",
+      "format": "video",
+      "angle": "video",
+      "voice": "Open with a short scenario from a recent (unnamed) project.",
+      "theme": "glass",
+      "hook": "In a recent dashboard redesign, users kept missing where they were four levels deep.",
+      "project": null,
+      "dir": "output/2026-11-14/video-1",
+      "delivered": true
     }
   ]
 }
