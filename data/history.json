@@ -975,6 +975,54 @@
       "project": null,
       "dir": "output/2026-11-15/video-1",
       "delivered": true
+    },
+    {
+      "id": "261116-1",
+      "date": "2026-11-16",
+      "slot": 0,
+      "created_at": "2026-11-16T17:22:58",
+      "topic": "Hand-drawn illustration styles making a comeback in product UI",
+      "category": "retro_revival",
+      "format": "carousel",
+      "angle": "tips",
+      "voice": "Open with a short scenario from a recent (unnamed) project.",
+      "theme": "noir",
+      "hook": "Vector corporate illustrations feel cold, so we tried hand-drawn accents on an onboarding flow.",
+      "project": null,
+      "dir": "output/2026-11-16/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261116-2",
+      "date": "2026-11-16",
+      "slot": 1,
+      "created_at": "2026-11-16T17:23:54",
+      "topic": "Designing a dashboard for people who only look at it once a week",
+      "category": "problem_solving",
+      "format": "single",
+      "angle": "do_dont",
+      "voice": "Playful and curious: 'what if we tried…', then show what happens.",
+      "theme": "blueprint",
+      "hook": "Most dashboards are built for daily power users, even when people only open them once a week on Monday morning.",
+      "project": null,
+      "dir": "output/2026-11-16/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261116-v1",
+      "date": "2026-11-16",
+      "slot": 99,
+      "created_at": "2026-11-16T17:25:00",
+      "topic": "Apple's Human Interface Guidelines and the idea of deference to content",
+      "category": "brand_systems",
+      "format": "video",
+      "angle": "video",
+      "voice": "Lead with a question a junior designer asked you, then answer it.",
+      "theme": "clay",
+      "hook": "A junior designer asked me why Apple's HIG places deference above visual flair.",
+      "project": null,
+      "dir": "output/2026-11-16/video-1",
+      "delivered": true
     }
   ]
 }
