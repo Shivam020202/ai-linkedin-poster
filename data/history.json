@@ -1023,6 +1023,54 @@
       "project": null,
       "dir": "output/2026-11-16/video-1",
       "delivered": true
+    },
+    {
+      "id": "261117-1",
+      "date": "2026-11-17",
+      "slot": 0,
+      "created_at": "2026-11-17T17:05:15",
+      "topic": "\"Good design doesn't need words\"",
+      "category": "misconceptions",
+      "format": "single",
+      "angle": "bold_statement",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "tiles",
+      "hook": "Stripping text from an interface rarely makes it intuitive; it usually just makes it cryptic.",
+      "project": null,
+      "dir": "output/2026-11-17/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261117-2",
+      "date": "2026-11-17",
+      "slot": 1,
+      "created_at": "2026-11-17T17:12:00",
+      "topic": "Memphis design patterns, toned down for interfaces",
+      "category": "retro_revival",
+      "format": "checklist",
+      "angle": "checklist",
+      "voice": "Direct teaching voice: state the rule, then show it.",
+      "theme": "skeuo",
+      "hook": "Memphis patterns still work—if you trim the excess.",
+      "project": null,
+      "dir": "output/2026-11-17/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261117-v1",
+      "date": "2026-11-17",
+      "slot": 99,
+      "created_at": "2026-11-17T17:16:57",
+      "topic": "Bento grid layouts and how to keep them from becoming a puzzle",
+      "category": "modern_trends",
+      "format": "video",
+      "angle": "video",
+      "voice": "Contrarian but fair: challenge a popular habit, then give the nuance.",
+      "theme": "grid",
+      "hook": "Bento grids look tidy until they turn into a maze.",
+      "project": null,
+      "dir": "output/2026-11-17/video-1",
+      "delivered": true
     }
   ]
 }
