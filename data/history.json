@@ -1263,6 +1263,54 @@
       "project": null,
       "dir": "output/2026-11-21/video-1",
       "delivered": true
+    },
+    {
+      "id": "261122-1",
+      "date": "2026-11-22",
+      "slot": 0,
+      "created_at": "2026-11-22T15:35:48",
+      "topic": "Prototyping micro-interactions before the static screens",
+      "category": "experiments",
+      "format": "quote",
+      "angle": "reflective",
+      "voice": "Open with a short scenario from a recent (unnamed) project.",
+      "theme": "accent",
+      "hook": "Static Figma screens make layout decisions look easy until you have to animate a loading state.",
+      "project": null,
+      "dir": "output/2026-11-22/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261122-2",
+      "date": "2026-11-22",
+      "slot": 1,
+      "created_at": "2026-11-22T15:38:31",
+      "topic": "Designing a whole screen in greyscale before adding any colour",
+      "category": "experiments",
+      "format": "single",
+      "angle": "bold_statement",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "gradient",
+      "hook": "I stopped adding colour until the layout was perfect – and the result was clearer than I expected.",
+      "project": null,
+      "dir": "output/2026-11-22/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261122-v1",
+      "date": "2026-11-22",
+      "slot": 99,
+      "created_at": "2026-11-22T15:41:00",
+      "topic": "The early-2000s glossy \"Aqua\" buttons, reimagined",
+      "category": "retro_revival",
+      "format": "video",
+      "angle": "video",
+      "voice": "Contrarian but fair: challenge a popular habit, then give the nuance.",
+      "theme": "glass",
+      "hook": "Glossy Aqua buttons still work—if you strip the excess.",
+      "project": null,
+      "dir": "output/2026-11-22/video-1",
+      "delivered": true
     }
   ]
 }
