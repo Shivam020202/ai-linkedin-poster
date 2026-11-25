@@ -1311,6 +1311,54 @@
       "project": null,
       "dir": "output/2026-11-22/video-1",
       "delivered": true
+    },
+    {
+      "id": "261125-1",
+      "date": "2026-11-25",
+      "slot": 0,
+      "created_at": "2026-11-25T18:09:21",
+      "topic": "Atlassian's design system and designing for many products at once",
+      "category": "brand_systems",
+      "format": "checklist",
+      "angle": "quick_tip",
+      "voice": "Direct teaching voice: state the rule, then show it.",
+      "theme": "aurora",
+      "hook": "When your design system powers Jira, Confluence, and Trello, shared page templates will break your workflow.",
+      "project": null,
+      "dir": "output/2026-11-25/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261125-2",
+      "date": "2026-11-25",
+      "slot": 1,
+      "created_at": "2026-11-25T18:09:52",
+      "topic": "Reducing decision fatigue on a pricing page",
+      "category": "problem_solving",
+      "format": "carousel",
+      "angle": "breakdown",
+      "voice": "Share a mistake you used to make and what you do now.",
+      "theme": "editorial",
+      "hook": "I used to put every feature into a massive pricing matrix, only to realize users stopped reading after row three.",
+      "project": null,
+      "dir": "output/2026-11-25/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261125-v1",
+      "date": "2026-11-25",
+      "slot": 99,
+      "created_at": "2026-11-25T18:11:04",
+      "topic": "Micro-interactions that give feedback instead of just moving",
+      "category": "modern_trends",
+      "format": "video",
+      "angle": "video",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "brutal",
+      "hook": "I watched a button bounce 300ms across the screen today, but it never actually confirmed my action.",
+      "project": null,
+      "dir": "output/2026-11-25/video-1",
+      "delivered": true
     }
   ]
 }
