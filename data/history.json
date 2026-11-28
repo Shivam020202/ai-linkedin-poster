@@ -1455,6 +1455,54 @@
       "project": null,
       "dir": "output/2026-11-27/video-1",
       "delivered": true
+    },
+    {
+      "id": "261128-1",
+      "date": "2026-11-28",
+      "slot": 0,
+      "created_at": "2026-11-28T16:21:05",
+      "topic": "Handling long, unpredictable user-generated names in tight layouts",
+      "category": "problem_solving",
+      "format": "quote",
+      "angle": "reflective",
+      "voice": "Lead with a question a junior designer asked you, then answer it.",
+      "theme": "accent",
+      "hook": "A junior designer asked me this week why we couldn't just set text-overflow ellipsis whenever a name overflows.",
+      "project": null,
+      "dir": "output/2026-11-28/post-1",
+      "delivered": true
+    },
+    {
+      "id": "261128-2",
+      "date": "2026-11-28",
+      "slot": 1,
+      "created_at": "2026-11-28T16:21:27",
+      "topic": "\"Users don't scroll\" — what actually happens below the fold",
+      "category": "misconceptions",
+      "format": "checklist",
+      "angle": "checklist",
+      "voice": "Observational: something you noticed in an everyday app (describe it generically unless the topic names a brand).",
+      "theme": "gradient",
+      "hook": "I watched someone immediately scroll past a massive 600px hero image without reading a single word.",
+      "project": null,
+      "dir": "output/2026-11-28/post-2",
+      "delivered": true
+    },
+    {
+      "id": "261128-v1",
+      "date": "2026-11-28",
+      "slot": 99,
+      "created_at": "2026-11-28T16:22:39",
+      "topic": "Using variable fonts to build an expressive type system",
+      "category": "experiments",
+      "format": "video",
+      "angle": "video",
+      "voice": "Contrarian but fair: challenge a popular habit, then give the nuance.",
+      "theme": "glass",
+      "hook": "Replacing static WOFF2 files with a variable font ruined our typographic discipline before it fixed it.",
+      "project": null,
+      "dir": "output/2026-11-28/video-1",
+      "delivered": true
     }
   ]
 }
